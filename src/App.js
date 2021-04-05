@@ -7,10 +7,21 @@ const options = {
     hierarchical: false
   },
   edges: {
-    color: "#000000",
+    arrows: {
+      to: {
+        enabled: false
+      }
+    },
+    color: "#7299fc",
     smooth: {
       type: 'horizontal',
       roundness: 1
+    }
+  },
+  nodes: {
+    font: {
+      bold: true,
+      color: "#121212"
     }
   },
   physics: {
