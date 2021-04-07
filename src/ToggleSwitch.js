@@ -3,9 +3,9 @@ import './ToggleSwitch.css'
 
 const ToggleSwitch = ({onClick}) => {
     return(
-        <label class="switch">
-            <input onClick={() => onClick()} type="checkbox"/>
-            <span class="slider round"></span>
+        <label className="switch">
+            <input onClick={() => onClick()} type="checkbox" defaultChecked/>
+            <span className="slider round"></span>
         </label>
     );
 }

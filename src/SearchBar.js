@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './SearchBar.css';
 
-const SearchBar = ({getRelatedArtists}) => {
+const SearchBar = ({searchCallback}) => {
   const [searchString, setSearchString] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   
@@ -26,20 +26,20 @@ const SearchBar = ({getRelatedArtists}) => {
   function handleGetRelatedArtists(searchString){
     setSearchString(searchString);
     setSuggestions([]);
-    getRelatedArtists(searchString);
+    searchCallback(searchString);
   }
   return (
     <div>
-        <div class="search-box">
+        <div className="search-box">
           <input
-          class="search-input" 
+          className="search-input" 
           placeholder={"search artist"}
           value={searchString}
           onChange={(e) => handleInputChange(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' ? handleGetRelatedArtists(searchString) : null}
           />
           {suggestions && suggestions.map((suggestion, index) => (
-            <div class="input-suggestion" id={index} key={index} onClick={() => handleGetRelatedArtists(suggestion)}>{suggestion}</div>
+            <div className="input-suggestion" id={index} key={index} onClick={() => handleGetRelatedArtists(suggestion)}>{suggestion}</div>
             ))}
         </div>
     </div>

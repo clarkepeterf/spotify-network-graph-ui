@@ -1,7 +1,7 @@
 import Graph from "react-graph-vis";
 import React, { useState } from "react";
-import SearchBar from './SearchBar';
-import ToggleSwitch from './ToggleSwitch';
+import SideBar from './SideBar';
+import {MemoizedGraph} from './MemoizedGraph';
 import './App.css'
 
 const options = {
@@ -22,7 +22,7 @@ const options = {
   },
   nodes: {
     font: {
-      bold: true,
+      bold: "true",
       color: "#121212"
     }
   },
@@ -39,7 +39,30 @@ const App = () => {
 
   const [error, setError] = useState(null);
   const [graph, setGraph] = useState({nodes: [], edges: []});
-  const [degreesOfSeparation, setDegreesOfSeparation] = useState(1);
+  const [degreesOfSeparation, setDegreesOfSeparation] = useState(2);
+  const [artistInFocus, setArtistInFocus] = useState(null);
+
+  function toggleDegreesOfSeparation(){
+    degreesOfSeparation === 1 ? setDegreesOfSeparation(2) : setDegreesOfSeparation(1);
+  }
+
+
+  function getArtistById(id){
+    fetch("http://localhost:8080/artist/" + id)
+    .then(res => res.json())
+    .then(
+      (result) => {
+        setArtistInFocus(result);
+        console.log(result);
+      },
+      // Note: it's important to handle errors here
+      // instead of a catch() block so that we don't swallow
+      // exceptions from actual bugs in components.
+      (error) => {
+        setError(error);
+      }
+    )
+  }
 
   function getRelatedArtists(searchString) {
     fetch("http://localhost:8080?searchString=" + searchString + "&degreesOfSeparation=" + degreesOfSeparation)
@@ -47,7 +70,6 @@ const App = () => {
     .then(
       (result) => {
         setGraph(result);
-        console.log(JSON.stringify(result));
       },
       // Note: it's important to handle errors here
       // instead of a catch() block so that we don't swallow
@@ -59,11 +81,11 @@ const App = () => {
   }
   const events = {
     select: ({ nodes, edges }) => {
-      console.log("Selected nodes:");
-      console.log(nodes);
-      console.log("Selected edges:");
-      console.log(edges);
-      alert("Selected node: " + nodes);
+      //do something when a node is selected
+      if(nodes && nodes[0]){
+        console.log(nodes);
+        getArtistById(nodes[0]);
+      }
     }
   }
 
@@ -78,17 +100,13 @@ const App = () => {
     return <div>Error: {error.message}</div>;
   } else {
     return(
-      <div class="app">
-        <h1 class="header">Spotify Network Graph</h1>
-        <div>Graph Size:</div>
-        <span>small</span><ToggleSwitch onClick={() => degreesOfSeparation === 1 ? setDegreesOfSeparation(2) : setDegreesOfSeparation(1)}></ToggleSwitch><span>large</span>
-        <div class="search-and-graph-table">
-          <div class="search-and-graph-row">
-            <div class="search-bar">
-              <SearchBar getRelatedArtists={getRelatedArtists}></SearchBar>
-            </div>
-            <div class="graph">
-              <Graph key={uuidv4()} graph={graph} options={options} events={events}  />
+      <div className="app">
+        <div className="app-table">
+          <div className="app-row">
+            <SideBar artistInFocus={artistInFocus} toggleClickCallback={toggleDegreesOfSeparation} searchCallback={getRelatedArtists}/>
+            <div className="graph">
+              {/* TODO: not sure if Memoized Graph is needed, trying to find a way to not re-render when non-graph state is updated */}
+              <MemoizedGraph key={uuidv4()} graph={graph} options={options} events={events}  />
             </div>
           </div>
         </div>

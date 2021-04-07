@@ -1,3 +1,4 @@
+html,
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -6,10 +7,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
-}
-
-html {
-  height: 100%;
+  overflow: hidden;
 }
 
 div[id="root"] {
@@ -27,18 +25,13 @@ div[id="root"] {
   vertical-align: top;
 }
 
-.search-and-graph-table {
+.app-table {
   display: table;
   height: 100%;
 }
 
-.search-and-graph-row {
+.app-row {
   display: table-row;
-  height: 100%;
-}
-
-.search-bar {
-  display: table-cell;
   height: 100%;
 }
 
