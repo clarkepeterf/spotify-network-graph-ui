@@ -1,0 +1,33 @@
+.search-input {
+  background: f7f7f7;
+  float: left;
+  width: 20rem;
+  outline-style: none;
+  border-style: none;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #a3a3a3;
+  font-size: 16px;
+  padding-left: 1%;
+}
+
+.input-suggestion {
+  background-color: #f7f7f7;
+  cursor: pointer;
+  font-size: 16px;
+  width: 20rem;
+  margin: 0%;
+  padding-left: 1%;
+}
+
+.input-suggestion:hover {
+  background-color: #d4d4d4;
+}
+
+.search-box {
+  border-color: #a3a3a3;
+  border-style: solid;
+  border-width: 2px;
+  padding: 0%;
+  margin: 2px;
+}

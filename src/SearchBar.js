@@ -1,19 +1,47 @@
 import React, {useState} from 'react';
-import {Button} from 'react-bootstrap';
-import {SearchIcon} from '@primer/octicons-react';
+import './SearchBar.css';
 
 const SearchBar = ({getRelatedArtists}) => {
-  const BarStyling = {width:"20rem",background:"#F2F1F9", border:"none", padding:"0.5rem"};
   const [searchString, setSearchString] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  
+  function handleInputChange(searchString){
+    setSuggestions(spotifySearch(searchString));
+    setSearchString(searchString);
+  }
+
+  function spotifySearch(searchString){
+    fetch("http://localhost:8080/search?q=" + searchString)
+    .then(res => res.json())
+    .then(
+      (result) => {
+        setSuggestions(result);
+      },
+      (error) => {
+        setSuggestions([]);
+      }
+    );
+  }
+
+  function handleGetRelatedArtists(searchString){
+    setSearchString(searchString);
+    setSuggestions([]);
+    getRelatedArtists(searchString);
+  }
   return (
     <div>
-        <input 
-        style={BarStyling}
-        placeholder={"search artist"}
-        value={searchString}
-        onChange={(e) => setSearchString(e.target.value)}
-        />
-        <Button variant="primary" onClick={() => getRelatedArtists(searchString)}><SearchIcon size={24}/></Button>
+        <div class="search-box">
+          <input
+          class="search-input" 
+          placeholder={"search artist"}
+          value={searchString}
+          onChange={(e) => handleInputChange(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' ? handleGetRelatedArtists(searchString) : null}
+          />
+          {suggestions && suggestions.map((suggestion, index) => (
+            <div class="input-suggestion" id={index} key={index} onClick={() => handleGetRelatedArtists(suggestion)}>{suggestion}</div>
+            ))}
+        </div>
     </div>
 
   );

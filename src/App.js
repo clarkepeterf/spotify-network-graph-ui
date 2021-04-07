@@ -1,6 +1,8 @@
 import Graph from "react-graph-vis";
 import React, { useState } from "react";
 import SearchBar from './SearchBar';
+import ToggleSwitch from './ToggleSwitch';
+import './App.css'
 
 const options = {
   layout: {
@@ -27,7 +29,8 @@ const options = {
   physics: {
     barnesHut: {
       avoidOverlap: 1,
-      gravitationalConstant: -100000
+      gravitationalConstant: -100000,
+      damping: 1
     }
   }
 };
@@ -35,10 +38,11 @@ const options = {
 const App = () => {
 
   const [error, setError] = useState(null);
-  const [graph, setGraph] = useState(null);
+  const [graph, setGraph] = useState({nodes: [], edges: []});
+  const [degreesOfSeparation, setDegreesOfSeparation] = useState(1);
 
   function getRelatedArtists(searchString) {
-    fetch("http://localhost:8080?searchString=" + searchString + "&degreesOfSeparation=2")
+    fetch("http://localhost:8080?searchString=" + searchString + "&degreesOfSeparation=" + degreesOfSeparation)
     .then(res => res.json())
     .then(
       (result) => {
@@ -72,19 +76,22 @@ const App = () => {
 
   if (error) {
     return <div>Error: {error.message}</div>;
-  } else if (graph) {
-    return(
-      <div id="root">
-      <h1>Spotify Network Graph</h1>
-      <SearchBar getRelatedArtists={getRelatedArtists}></SearchBar>
-      <Graph key={uuidv4()} graph={graph} options={options} events={events}  />
-    </div>
-    );
   } else {
-    return (
-      <div>
-        <h1>Spotify Network Graph</h1>
-        <SearchBar getRelatedArtists={getRelatedArtists}></SearchBar>
+    return(
+      <div class="app">
+        <h1 class="header">Spotify Network Graph</h1>
+        <div>Graph Size:</div>
+        <span>small</span><ToggleSwitch onClick={() => degreesOfSeparation === 1 ? setDegreesOfSeparation(2) : setDegreesOfSeparation(1)}></ToggleSwitch><span>large</span>
+        <div class="search-and-graph-table">
+          <div class="search-and-graph-row">
+            <div class="search-bar">
+              <SearchBar getRelatedArtists={getRelatedArtists}></SearchBar>
+            </div>
+            <div class="graph">
+              <Graph key={uuidv4()} graph={graph} options={options} events={events}  />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
