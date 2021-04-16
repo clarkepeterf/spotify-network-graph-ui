@@ -14,25 +14,11 @@ div[id="root"] {
   height: 100%;
 }
 
-.app {
-  height: 100%;
-}
-
 .graph {
   height: 100%;
   width: 100%;
   display: table-cell;
   vertical-align: top;
-}
-
-.app-table {
-  display: table;
-  height: 100%;
-}
-
-.app-row {
-  display: table-row;
-  height: 100%;
 }
 
 code {

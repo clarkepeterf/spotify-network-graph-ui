@@ -14,7 +14,8 @@ const MemoizedGraph = ({graph, nodeSelectCallback}) => {
         
           const options = {
             layout: {
-              hierarchical: false
+              hierarchical: false,
+              improvedLayout: false
             },
             edges: {
               arrows: {
@@ -47,7 +48,6 @@ const MemoizedGraph = ({graph, nodeSelectCallback}) => {
             select: ({ nodes, edges }) => {
               //do something when a node is selected
               if(nodes && nodes[0]){
-                console.log(nodes);
                 nodeSelectCallback(nodes[0]);
               }
             }

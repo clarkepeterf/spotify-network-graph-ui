@@ -1,22 +1,26 @@
-import React from "react";
+import React, { useMemo } from "react";
 import './ArtistDetails.css';
 
 const ArtistDetails = ({artist}) => {
-    if(artist){
-        console.log(artist.images[0]);
-        return(
-            <div>
-                <h3>{artist.name}</h3>
-                {artist.images && artist.images[0] &&
-                    <div class="circular">
-                        <img src={artist.images[0].url} alt={artist.name}/>
-                    </div>
-                }
-            </div>
-        );
-    } else {
-        return null;
-    }
+    const artistDetailsComponent = useMemo( () => {
+        if(artist){
+            const {name, images} = artist;
+            console.log(name);
+            return(
+                <div className="artistDetails">
+                    <h3>{name}</h3>
+                    {images && images[0] &&
+                        <div className="circular">
+                            <img src={images[0].url} alt={name}/>
+                        </div>
+                    }
+                </div>
+            );
+        } else {
+            return null;
+        }
+    }, [artist]);
+    return artistDetailsComponent;
 }
 
 export default ArtistDetails;

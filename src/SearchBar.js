@@ -6,12 +6,16 @@ const SearchBar = ({searchCallback}) => {
   const [suggestions, setSuggestions] = useState([]);
   
   function handleInputChange(searchString){
-    setSuggestions(spotifySearch(searchString));
     setSearchString(searchString);
+    if(searchString && searchString.length > 0){
+      spotifySearch(searchString);
+    } else{
+      setSuggestions([]);
+    }
   }
 
   function spotifySearch(searchString){
-    fetch("http://localhost:8080/search?q=" + searchString)
+    fetch(`http://localhost:8080/search?q=${searchString}`)
     .then(res => res.json())
     .then(
       (result) => {
@@ -26,7 +30,9 @@ const SearchBar = ({searchCallback}) => {
   function handleGetRelatedArtists(searchString){
     setSearchString(searchString);
     setSuggestions([]);
-    searchCallback(searchString);
+    if(searchString && searchString.length > 0){
+      searchCallback(searchString);
+    }
   }
   return (
     <div>
@@ -36,9 +42,9 @@ const SearchBar = ({searchCallback}) => {
           placeholder={"search artist"}
           value={searchString}
           onChange={(e) => handleInputChange(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' ? handleGetRelatedArtists(searchString) : null}
+          onKeyPress={(e) => e.key === 'Enter' ? handleGetRelatedArtists(searchString) : null}
           />
-          {suggestions && suggestions.map((suggestion, index) => (
+          {suggestions && suggestions.length > 0 && suggestions.map((suggestion, index) => (
             <div className="input-suggestion" id={index} key={index} onClick={() => handleGetRelatedArtists(suggestion)}>{suggestion}</div>
             ))}
         </div>

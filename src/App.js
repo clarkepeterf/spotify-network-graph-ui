@@ -16,12 +16,11 @@ const App = () => {
 
 
   const getArtistById = useCallback((id) => {
-    fetch("http://localhost:8080/artist/" + id)
+    fetch(`http://localhost:8080/artist/${id}`)
     .then(res => res.json())
     .then(
       (result) => {
         setArtistInFocus(result);
-        console.log(result);
       },
       // Note: it's important to handle errors here
       // instead of a catch() block so that we don't swallow
@@ -33,7 +32,7 @@ const App = () => {
   }, []);
 
   function getRelatedArtists(searchString) {
-    fetch("http://localhost:8080?searchString=" + searchString + "&degreesOfSeparation=" + degreesOfSeparation)
+    fetch(`http://localhost:8080?searchString=${searchString}&degreesOfSeparation=${degreesOfSeparation}`)
     .then(res => res.json())
     .then(
       (result) => {
@@ -53,14 +52,9 @@ const App = () => {
   } else {
     return(
       <div className="app">
-        <div className="app-table">
-          <div className="app-row">
-            <SideBar artistInFocus={artistInFocus} toggleClickCallback={toggleDegreesOfSeparation} searchCallback={getRelatedArtists}/>
-            <div className="graph">
-              {/* TODO: not sure if Memoized Graph is needed, trying to find a way to not re-render when non-graph state is updated */}
-              <MemoizedGraph graph={graph} nodeSelectCallback={getArtistById}/>
-            </div>
-          </div>
+        <SideBar artistInFocus={artistInFocus} toggleClickCallback={toggleDegreesOfSeparation} searchCallback={getRelatedArtists}/>
+        <div className="graph">
+          <MemoizedGraph graph={graph} nodeSelectCallback={getArtistById}/>
         </div>
       </div>
     );

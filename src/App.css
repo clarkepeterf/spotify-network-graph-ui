@@ -1,3 +1,9 @@
+.app {
+  height: 100%;
+  display: grid;
+  grid-template-columns: clamp(200px, 20%, 400px) auto;
+}
+
 .graph {
   border-style: solid;
   border-color: #000000;
