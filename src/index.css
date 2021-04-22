@@ -7,7 +7,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
+  background-color: hsl(0, 0%, 22%);
+  color: hsla(0, 0%, 99%, 1);
 }
 
 div[id="root"] {
@@ -17,11 +19,13 @@ div[id="root"] {
 .graph {
   height: 100%;
   width: 100%;
-  display: table-cell;
-  vertical-align: top;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.vis-network {
+  outline: none;
 }

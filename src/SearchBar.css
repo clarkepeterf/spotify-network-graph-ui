@@ -1,34 +1,49 @@
 .search-input {
-  background: f7f7f7;
+  background-color: #f8f8ff;
   float: left;
   width: 100%;
   outline-style: none;
   border-style: none;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-bottom-color: #a3a3a3;
   font-size: 16px;
   padding-left: 1%;
   margin: 0%;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
 }
 
 .input-suggestion {
-  background-color: #f7f7f7;
   cursor: pointer;
   font-size: 16px;
   width: 100%;
   margin: 0%;
   padding-left: 1%;
+  z-index: 100;
 }
 
-.input-suggestion:hover {
+.input-suggestion-active {
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  margin: 0%;
+  padding-left: 1%;
   background-color: #d4d4d4;
+  z-index: 100;
 }
 
 .search-box {
+  opacity: 1;
   border-color: #a3a3a3;
   border-style: solid;
-  border-width: 2px;
-  padding: 0%;
+  border-width: 1px;
+  border-radius: 6px;
+  padding: 0px;
   margin: 2px;
+  overflow: hidden;
+  position: absolute;
+  z-index: 99;
+  width: 300px;
+  background-color: #f8f8ff;
+  color: black;
 }

@@ -1,3 +1,22 @@
 .side-bar {
   height: 100%;
+  padding-left: 5px;
+}
+
+.tabbed {
+  margin-left: 2em;
+}
+
+.artistName {
+  margin-top: 50px;
+}
+
+.spotifyEmbed {
+  border-radius: 6px;
+}
+
+.hamburger {
+  cursor: pointer;
+  user-select: none;
+  font-size: 32px;
 }
