@@ -48,11 +48,9 @@ const PeterGraph = ({graph, nodeSelectCallback}) => {
     useEffect(() => {
         const network = new Network(container.current, data, options);
         network.on("selectNode", (selectNodeEvent) => {
-        console.log("selectNodeEvent:", selectNodeEvent);
         nodeSelectCallback(selectNodeEvent.nodes[0]);
         });
         network.on("doubleClick", (doubleClickEvent) => {
-            console.log("doubleClickEvent", doubleClickEvent);
             const {nodes, pointer} = doubleClickEvent;
             if(nodes && nodes.length === 1 && pointer){
                 const x = Math.round(pointer.canvas.x);

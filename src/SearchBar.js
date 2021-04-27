@@ -7,18 +7,16 @@ const SearchBar = ({searchCallback}) => {
   const [suggestions, setSuggestions] = useState([]);
   const [activeSelection, setActiveSelection] = useState(-1);
   
-  const handleInputChange = (newInput) => {
+  const handleInputChange = async (newInput) => {
     setSearchString(newInput);
     if(newInput && newInput.length > 0){
-      getSpotifySuggestions(newInput, setSuggestions, handleSuggestionsError);
+      try{
+        const suggestions = await getSpotifySuggestions(newInput);
+        setSuggestions(suggestions);
+      } catch(error){ setSuggestions([])} //since suggestions aren't that important, just set them to empty on an error
     } else{
       setSuggestions([]);
     }
-  }
-
-  const handleSuggestionsError = (error) => {
-    //since suggestions aren't that important, just set them to empty on an error
-    setSuggestions([]);
   }
 
   const handleGetRelatedArtists = (searchString) => {
@@ -30,7 +28,6 @@ const SearchBar = ({searchCallback}) => {
   }
   
   const handleKeyDown = (key) => {
-    console.log(key);
     switch(key){
       case "Down": // IE/Edge specific value
       case "ArrowDown":
@@ -56,6 +53,11 @@ const SearchBar = ({searchCallback}) => {
     }
   }
 
+  const handleBlur = () => {
+    setSuggestions([]);
+    setActiveSelection(-1);
+  }
+
   return (
         <div className="search-box" onMouseOut={() => setActiveSelection(-1)}>
           <input
@@ -64,7 +66,7 @@ const SearchBar = ({searchCallback}) => {
           value={searchString}
           onChange={(e) => handleInputChange(e.target.value)}
           onKeyPress={(e) => handleKeyPress(e.key)}
-          onBlur={() => setSuggestions([])}
+          onBlur={() => handleBlur()}
           onFocus={() => handleInputChange(searchString)}
           onKeyDown={(e) => handleKeyDown(e.key)}
           onMouseOver={() => setActiveSelection(-1)}

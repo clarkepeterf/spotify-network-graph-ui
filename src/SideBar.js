@@ -1,8 +1,8 @@
-import React, {useState} from "react";
 import SearchBar from './SearchBar';
 import './SideBar.css'
 
-const SideBar = ({artistInFocus, toggleClickCallback, searchCallback, sideBarHidden, setSideBarHidden}) => {
+const SideBar = ({artistInFocus, artistInFocusError, toggleClickCallback, searchCallback, sideBarHidden, setSideBarHidden}) => {
+    // TODO: do something with artistInFocusError
     return(
         <div>
             {sideBarHidden &&
@@ -31,7 +31,7 @@ const SideBar = ({artistInFocus, toggleClickCallback, searchCallback, sideBarHid
         • There is an embedded Spotify media player above. You can listen to artists' top songs or click the embedded title bar to view the artist profile on Spotify
                 ">How to Use This Page</div>
                 {artistInFocus && <h3 className="artistName">{artistInFocus.name}</h3>}
-                {artistInFocus && <iframe className="spotifyEmbed" title="spotifyEmbed" src={`https://open.spotify.com/embed/artist/${artistInFocus.id}`} width="300" height="400" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>}
+                {artistInFocus && <iframe className="spotifyEmbed" title="spotifyEmbed" src={`https://open.spotify.com/embed/artist/${artistInFocus.id}`} width="300" height="400" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>}
             </div>}
         </div>
     );
