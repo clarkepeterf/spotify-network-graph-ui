@@ -7,10 +7,6 @@
   margin-left: 2em;
 }
 
-.artistName {
-  margin-top: 50px;
-}
-
 .spotifyEmbed {
   border-radius: 6px;
 }
@@ -19,4 +15,8 @@
   cursor: pointer;
   user-select: none;
   font-size: 32px;
+}
+
+.how-to-use {
+  margin-top: 50px;
 }

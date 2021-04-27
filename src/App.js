@@ -1,8 +1,8 @@
 import React, { useState, useCallback} from "react";
 import SideBar from './SideBar';
 import './App.css'
-import PeterGraph from "./PeterGraph";
 import MemoizedGraph from "./MemoizedGraph";
+import {getArtistById} from "./Api"
 
 const App = () => {
 
@@ -16,37 +16,25 @@ const App = () => {
     degreesOfSeparation === 1 ? setDegreesOfSeparation(2) : setDegreesOfSeparation(1);
   }
 
-  const getArtistById = useCallback((id) => {
-    fetch(`http://localhost:8080/artist/${id}`)
-    .then(res => res.json())
-    .then(
-      (result) => {
-        setArtistInFocus(result);
-      },
-      // Note: it's important to handle errors here
-      // instead of a catch() block so that we don't swallow
-      // exceptions from actual bugs in components.
-      (error) => {
-        setError(error);
-      }
-    )
+  const handleGetArtistById = useCallback((id) => {
+    getArtistById(id, setArtistInFocus, setError);
   }, []);
 
   function getArtist(name){
-    fetch(`http://localhost:8080/artist?name=${name}`)
+    fetch(encodeURI(`http://localhost:8080/artist?name=${name}`))
     .then(res => res.json())
     .then(
       (result) => {
         setArtistInFocus(result);
       },
       (error) => {
-        //TODO: do something on error?
+        setError(error);
       }
     );
   }
 
   function getRelatedArtists(searchString) {
-    fetch(`http://localhost:8080?searchString=${searchString}&degreesOfSeparation=${degreesOfSeparation}`)
+    fetch(encodeURI(`http://localhost:8080?searchString=${searchString}&degreesOfSeparation=${degreesOfSeparation}`))
     .then(res => res.json())
     .then(
       (result) => {
@@ -69,7 +57,7 @@ const App = () => {
 
   function updateGraph(artistId) {
     console.trace({artistId})
-    fetch(`http://localhost:8080/graph?id=${artistId}`,{
+    fetch(encodeURI(`http://localhost:8080/graph?id=${artistId}`),{
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -94,7 +82,7 @@ const App = () => {
       <div className={sideBarHidden ? "app-hide-side" : "app"}>
         <SideBar sideBarHidden={sideBarHidden} setSideBarHidden={setSideBarHidden} artistInFocus={artistInFocus} toggleClickCallback={toggleDegreesOfSeparation} searchCallback={handleSearch}/>
         <div className="graph">
-          <MemoizedGraph graph={graph} nodeSelectCallback={getArtistById}></MemoizedGraph>
+          <MemoizedGraph graph={graph} nodeSelectCallback={handleGetArtistById}></MemoizedGraph>
         </div>
       </div>
     );

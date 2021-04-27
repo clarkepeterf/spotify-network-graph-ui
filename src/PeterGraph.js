@@ -66,7 +66,7 @@ const PeterGraph = ({graph, nodeSelectCallback}) => {
                 network.selectNodes([selectedNodes[0]]);
             }
         })
-        network.setSize(container.current.offsetWidth, container.current.offsetHeight);
+        network.setSize(container.current.clientWidth, container.current.clientHeight);
     });
     
     function updateGraph(id, x, y){
