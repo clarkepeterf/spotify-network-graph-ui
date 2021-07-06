@@ -1,14 +1,14 @@
 import React, {useMemo} from "react";
 import PeterGraph from "./PeterGraph"
 
-const MemoizedGraph = ({graph, nodeSelectCallback}) => {
+const MemoizedGraph = ({initialArtist, graph, nodeSelectCallback}) => {
 
     const peterGraph = useMemo(() => {
 
         return(
-            <PeterGraph graph={graph} nodeSelectCallback={nodeSelectCallback} />
+            <PeterGraph initialArtist={initialArtist} graph={graph} nodeSelectCallback={nodeSelectCallback} />
         );
-    }, [graph, nodeSelectCallback]);
+    }, [initialArtist, graph, nodeSelectCallback]);
 
     return peterGraph;
 }

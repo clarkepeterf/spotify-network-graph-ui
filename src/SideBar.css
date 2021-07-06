@@ -3,20 +3,10 @@
   padding-left: 5px;
 }
 
-.tabbed {
-  margin-left: 2em;
-}
-
 .spotifyEmbed {
   border-radius: 6px;
 }
 
-.hamburger {
-  cursor: pointer;
-  user-select: none;
-  font-size: 32px;
-}
-
-.how-to-use {
+.howToUse {
   margin-top: 50px;
 }

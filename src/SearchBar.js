@@ -31,11 +31,11 @@ const SearchBar = ({searchCallback}) => {
     switch(key){
       case "Down": // IE/Edge specific value
       case "ArrowDown":
-        activeSelection < suggestions.length - 2 ? setActiveSelection(activeSelection + 1) : setActiveSelection(activeSelection)
+        activeSelection < suggestions.length - 1 ? setActiveSelection(activeSelection + 1) : setActiveSelection(activeSelection)
         break;
       case "Up": // IE/Edge specific value
       case "ArrowUp":
-        activeSelection > -1 ? setActiveSelection(activeSelection + -1) : setActiveSelection(activeSelection)
+        activeSelection > -1 ? setActiveSelection(activeSelection - 1) : setActiveSelection(activeSelection)
         break;
       default:
         break;
@@ -74,7 +74,7 @@ const SearchBar = ({searchCallback}) => {
           {suggestions && suggestions.length > 0 && suggestions.map((suggestion, index) => (
             <div
               className={index === activeSelection ? "input-suggestion-active" : "input-suggestion"}
-              id={index}
+              id={"suggestion" + index}
               key={index}
               onMouseOver={() => setActiveSelection(index)}
               onMouseDown={() => handleGetRelatedArtists(suggestion)}>{suggestion}</div>

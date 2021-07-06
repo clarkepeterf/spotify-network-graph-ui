@@ -32,6 +32,10 @@
   z-index: 100;
 }
 
+#suggestion0 {
+  border-top: black;
+}
+
 .search-box {
   opacity: 1;
   border-color: #a3a3a3;

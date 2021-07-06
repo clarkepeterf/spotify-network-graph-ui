@@ -8,12 +8,12 @@ const App = () => {
 
   const [error, setError] = useState(null);
   const [graph, setGraph] = useState({nodes: [], edges: []});
+  const [graphInitialArtist, setGraphInitialArtist] = useState(null);
   const [degreesOfSeparation, setDegreesOfSeparation] = useState(1);
   const [artistInFocus, setArtistInFocus] = useState(null);
   const [artistInFocusError, setArtistInFocusError] = useState(null);
-  const [sideBarHidden, setSideBarHidden] = useState(false);
 
-  function toggleDegreesOfSeparation(){
+  const toggleDegreesOfSeparation = () => {
     degreesOfSeparation === 1 ? setDegreesOfSeparation(2) : setDegreesOfSeparation(1);
   }
 
@@ -26,12 +26,13 @@ const App = () => {
     }
   }, []);
 
-  function getArtist(name){
+  const getArtist = (name) => {
     fetch(encodeURI(`http://localhost:8080/artist?name=${name}`))
     .then(res => res.json())
     .then(
       (result) => {
         setArtistInFocus(result);
+        setGraphInitialArtist(result);
       },
       (error) => {
         setArtistInFocusError(error);
@@ -39,7 +40,7 @@ const App = () => {
     );
   }
 
-  function getRelatedArtists(searchString) {
+  const getRelatedArtists = (searchString) => {
     fetch(encodeURI(`http://localhost:8080?searchString=${searchString}&degreesOfSeparation=${degreesOfSeparation}`))
     .then(res => res.json())
     .then(
@@ -55,7 +56,7 @@ const App = () => {
     )
   }
 
-  function handleSearch(searchString) {
+  const handleSearch = (searchString) => {
     getRelatedArtists(searchString);
     getArtist(searchString);
   }
@@ -64,10 +65,10 @@ const App = () => {
     return <div>Error: {error.message}</div>;
   } else {
     return(
-      <div className={sideBarHidden ? "app-hide-side" : "app"}>
-        <SideBar sideBarHidden={sideBarHidden} setSideBarHidden={setSideBarHidden} artistInFocus={artistInFocus} artistInFocusError={artistInFocusError} toggleClickCallback={toggleDegreesOfSeparation} searchCallback={handleSearch}/>
+      <div className="app">
+        <SideBar artistInFocus={artistInFocus} artistInFocusError={artistInFocusError} toggleClickCallback={toggleDegreesOfSeparation} searchCallback={handleSearch}/>
         <div className="graph">
-          <MemoizedGraph graph={graph} nodeSelectCallback={handleGetArtistById}></MemoizedGraph>
+          <MemoizedGraph initialArtist={graphInitialArtist} graph={graph} nodeSelectCallback={handleGetArtistById}></MemoizedGraph>
         </div>
       </div>
     );

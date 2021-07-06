@@ -58,18 +58,10 @@ const PeterGraph = ({graph, nodeSelectCallback}) => {
                 updateGraph(nodes[0], x, y);
             }
         })
-        network.on("afterDrawing", () => {
-            const selectedNodes = network.getSelectedNodes();
-            if(selectedNodes && selectedNodes.length ===1){
-                network.selectNodes([selectedNodes[0]]);
-            }
-        })
         network.setSize(container.current.clientWidth, container.current.clientHeight);
     });
     
-    function updateGraph(id, x, y){
-        console.log(`http://localhost:8080/update?id=${id}&x=${x}&y=${y}`);
-        console.log(JSON.stringify({nodes: nodes.get(), edges: edges.get()}));
+    const updateGraph = (id, x, y) =>{
         fetch(`http://localhost:8080/update?id=${id}&x=${x}&y=${y}`, {
             method: "POST",
             headers: {
@@ -80,8 +72,8 @@ const PeterGraph = ({graph, nodeSelectCallback}) => {
         .then(res => res.json())
         .then(
             (result) => {
-                nodes.add(result.nodes);
-                edges.add(result.edges);
+                result.nodes && nodes.add(result.nodes);
+                result.edges && edges.add(result.edges);
             },
             (error) => {
             console.log(error);
