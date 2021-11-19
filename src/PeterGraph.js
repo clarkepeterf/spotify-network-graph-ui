@@ -63,7 +63,7 @@ const PeterGraph = ({ graph, nodeSelectCallback }) => {
 
   const updateGraph = async (id, x, y) => {
     try {
-      const updates = await updateRelatedArtistGraph(nodes.get(), edges.get, id, x, y);
+      const updates = await updateRelatedArtistGraph(nodes.get(), edges.get(), id, x, y);
       updates.nodes && nodes.add(updates.nodes);
       updates.edges && edges.add(updates.edges);
     } catch (error) {
