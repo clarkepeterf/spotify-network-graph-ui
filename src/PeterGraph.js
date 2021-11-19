@@ -3,11 +3,12 @@ import { DataSet, Network } from "vis-network/standalone";
 import "./PeterGraph.css";
 import { updateRelatedArtistGraph } from "./Api";
 
-const PeterGraph = ({ graph, nodeSelectCallback }) => {
+const PeterGraph = ({ graph, nodeSelectCallback, windowResizeCallback }) => {
   const container = useRef(null);
   const nodes = new DataSet(graph.nodes);
 
   const edges = new DataSet(graph.edges);
+
 
   const data = {
     nodes: nodes,
@@ -59,6 +60,7 @@ const PeterGraph = ({ graph, nodeSelectCallback }) => {
       }
     })
     network.setSize(container.current.clientWidth, container.current.clientHeight);
+    windowResizeCallback(network, container.current);
   });
 
   const updateGraph = async (id, x, y) => {

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import SideBar from "./SideBar";
 import "./App.css"
 import MemoizedGraph from "./MemoizedGraph";
@@ -12,6 +12,31 @@ const App = () => {
   const [degreesOfSeparation, setDegreesOfSeparation] = useState(1);
   const [artistInFocus, setArtistInFocus] = useState(null);
   const [artistInFocusError, setArtistInFocusError] = useState(null);
+  //network and container used to resize the vis.js canvas
+  const network = useRef(null);
+  const container = useRef(null);
+
+
+  const windowResizeCallback = (graphNetwork, graphContainer) => {
+    network.current = graphNetwork;
+    container.current = graphContainer;
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return _ => {
+      window.removeEventListener('resize', handleResize);
+    }
+  });
+
+  const handleResize = () => {
+    network.current && container.current && network.current.setSize(container.current.clientWidth, container.current.clientHeight);
+    if (graphInitialArtist) {
+      //For some reason the graph sometimes disappears on resize, but if we move the graph it reappears. 'Move' central node to it's current position.
+      const position = network.current.getPosition(graphInitialArtist.id);
+      network.current && container.current && network.current.moveNode(graphInitialArtist.id, position.x, position.y);
+    }
+  }
 
   const toggleDegreesOfSeparation = () => {
     degreesOfSeparation === 1 ? setDegreesOfSeparation(2) : setDegreesOfSeparation(1);
@@ -45,7 +70,7 @@ const App = () => {
       <div className="app">
         <SideBar artistInFocus={artistInFocus} artistInFocusError={artistInFocusError} toggleClickCallback={toggleDegreesOfSeparation} searchCallback={handleSearch} />
         <div className="graph">
-          <MemoizedGraph initialArtist={graphInitialArtist} graph={graph} nodeSelectCallback={handleGetArtistById}></MemoizedGraph>
+          <MemoizedGraph initialArtist={graphInitialArtist} graph={graph} nodeSelectCallback={handleGetArtistById} windowResizeCallback={windowResizeCallback}></MemoizedGraph>
         </div>
       </div>
     );
