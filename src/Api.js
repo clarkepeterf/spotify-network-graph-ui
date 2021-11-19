@@ -39,7 +39,7 @@ const updateRelatedArtistGraph = async (nodes, edges, id, x, y) => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ nodes: nodes, edges })
+    body: JSON.stringify({ nodes: nodes, edges: edges })
   });
   if (!response.ok) {
     throw Error(response.statusText);
