@@ -1,7 +1,7 @@
 .app {
   height: 100%;
   display: grid;
-  grid-template-columns: 310px auto;
+  grid-template-columns: 260px auto;
 }
 
 .app-hide-side {

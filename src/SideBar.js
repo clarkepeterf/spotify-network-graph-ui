@@ -18,7 +18,7 @@ const SideBar = ({ artistInFocus, toggleClickCallback, searchCallback, searchSug
                     <div> • Double-click an artist to expand the graph from that artist</div>
                 </div>
                 {artistInFocus && <h3 className="artistName">{artistInFocus.name}</h3>}
-                {artistInFocus && <iframe className="spotifyEmbed" title="spotifyEmbed" src={`https://open.spotify.com/embed/artist/${artistInFocus.id}`} width="300" height="400" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>}
+                {artistInFocus && <iframe className="spotifyEmbed" title="spotifyEmbed" src={`https://open.spotify.com/embed/artist/${artistInFocus.id}`} width="250" height="400" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>}
             </div>
         </div>
     );

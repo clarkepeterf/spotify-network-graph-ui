@@ -49,7 +49,7 @@ const App = () => {
           toggleClickCallback={toggleDegreesOfSeparation}
           searchCallback={handleSearch}
           searchSuggestionCallback={getSpotifySuggestions}
-          searchPlaceholderText={"Search for an Artist to Create a Graph"} />
+          searchPlaceholderText={"Search Artist to Create a Graph"} />
         <div className="graph">
           <MemoizedGraph initialArtist={graphInitialArtist} graph={graph} artistSelectedCallback={handleGetArtistById}></MemoizedGraph>
         </div>
