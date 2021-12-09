@@ -5,7 +5,7 @@ const SideBar = ({ artistInFocus, toggleClickCallback, searchCallback, searchSug
     return (
         <div>
             <div className="side-bar">
-                <h2 className="side-bar-title">Spotify Network Graph</h2>
+                <h3 className="side-bar-title">Spotify Network Graph</h3>
                 <div>Initial Graph Size:</div>
                 <div onChange={() => toggleClickCallback()}>
                     <input id="small-button" className="radioButton" type="radio" value="small" name="graphSize" /> <label for="small-button"> Immediate Connections </label>
@@ -17,7 +17,7 @@ const SideBar = ({ artistInFocus, toggleClickCallback, searchCallback, searchSug
                     <div> • Single-click an artist to view top tracks</div>
                     <div> • Double-click an artist to expand the graph from that artist</div>
                 </div>
-                {artistInFocus && <h3 className="artistName">{artistInFocus.name}</h3>}
+                {artistInFocus && <h4 className="artistName">{artistInFocus.name}</h4>}
                 {artistInFocus && <iframe className="spotifyEmbed" title="spotifyEmbed" src={`https://open.spotify.com/embed/artist/${artistInFocus.id}`} width="250" height="400" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>}
             </div>
         </div>
