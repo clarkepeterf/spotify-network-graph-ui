@@ -67,18 +67,20 @@ const SearchBar = ({ searchCallback, suggestionCallback, placeholderText }) => {
 
   return (
     <div className="search-box" onMouseOut={() => setActiveSelection(-1)}>
-      <input
-        type="search"
-        className="search-input"
-        placeholder={placeholderText}
-        value={searchString}
-        onChange={(e) => handleInputChange(e.target.value)}
-        onKeyPress={(e) => handleKeyPress(e.key)}
-        onBlur={() => handleBlur()}
-        onFocus={() => handleInputChange(searchString)}
-        onKeyDown={(e) => handleKeyDown(e.key)}
-        onMouseOver={() => setActiveSelection(-1)}
-      />
+      <form action="." onSubmit={(e) => { e.preventDefault() }}>
+        <input
+          type="search"
+          className="search-input"
+          placeholder={placeholderText}
+          value={searchString}
+          onChange={(e) => handleInputChange(e.target.value)}
+          onKeyPress={(e) => handleKeyPress(e.key)}
+          onBlur={() => handleBlur()}
+          onFocus={() => handleInputChange(searchString)}
+          onKeyDown={(e) => handleKeyDown(e.key)}
+          onMouseOver={() => setActiveSelection(-1)}
+        />
+      </form>
       {suggestions && suggestions.length > 0 && suggestions.map((suggestion, index) => (
         <div
           className={index === activeSelection ? "input-suggestion-active" : "input-suggestion"}
