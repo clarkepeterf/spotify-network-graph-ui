@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import SideBar from "./SideBar";
 import "./App.css"
 import MemoizedGraph from "./MemoizedGraph";
-import { getArtistById, getArtistByName, getRelatedArtistGraph } from "./Api"
+import { getArtistById, getArtistByName, getRelatedArtistGraph, getSpotifySuggestions } from "./Api"
 
 const App = () => {
 
@@ -43,7 +43,13 @@ const App = () => {
   } else {
     return (
       <div className="app">
-        <SideBar artistInFocus={artistInFocus} artistInFocusError={artistInFocusError} toggleClickCallback={toggleDegreesOfSeparation} searchCallback={handleSearch} />
+        <SideBar
+          artistInFocus={artistInFocus}
+          artistInFocusError={artistInFocusError}
+          toggleClickCallback={toggleDegreesOfSeparation}
+          searchCallback={handleSearch}
+          searchSuggestionCallback={getSpotifySuggestions}
+          searchPlaceholderText={"Search for an Artist to Create a Graph"} />
         <div className="graph">
           <MemoizedGraph initialArtist={graphInitialArtist} graph={graph} nodeSelectCallback={handleGetArtistById}></MemoizedGraph>
         </div>

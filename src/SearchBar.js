@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import './SearchBar.css';
-import { getSpotifySuggestions } from './Api';
 
-const SearchBar = ({ searchCallback }) => {
+const SearchBar = ({ searchCallback, suggestionCallback, placeholderText }) => {
   const [searchString, setSearchString] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [activeSelection, setActiveSelection] = useState(-1);
@@ -11,7 +10,7 @@ const SearchBar = ({ searchCallback }) => {
     setSearchString(newInput);
     if (newInput && newInput.length > 0) {
       try {
-        const suggestions = await getSpotifySuggestions(newInput);
+        const suggestions = await suggestionCallback(newInput);
         setSuggestions(suggestions);
       } catch (error) { setSuggestions([]) } //since suggestions aren't that important, just set them to empty on an error
     } else {
@@ -19,7 +18,7 @@ const SearchBar = ({ searchCallback }) => {
     }
   }
 
-  const handleGetRelatedArtists = (searchString) => {
+  const handleSearch = (searchString) => {
     setSearchString(searchString);
     setSuggestions([]);
     if (searchString && searchString.length > 0) {
@@ -46,7 +45,15 @@ const SearchBar = ({ searchCallback }) => {
     console.log(key);
     switch (key) {
       case 'Enter':
-        activeSelection > -1 ? handleGetRelatedArtists(suggestions[activeSelection]) : handleGetRelatedArtists(searchString)
+        if (activeSelection > -1) {
+          handleSearch(suggestions[activeSelection]);
+        } else {
+          if (suggestions && suggestions[0]) {
+            handleSearch(suggestions[0]);
+          } else {
+            handleSearch(searchString);
+          }
+        }
         break;
       default:
         break;
@@ -61,8 +68,9 @@ const SearchBar = ({ searchCallback }) => {
   return (
     <div className="search-box" onMouseOut={() => setActiveSelection(-1)}>
       <input
+        type="search"
         className="search-input"
-        placeholder={"Search for an Artist"}
+        placeholder={placeholderText}
         value={searchString}
         onChange={(e) => handleInputChange(e.target.value)}
         onKeyPress={(e) => handleKeyPress(e.key)}
@@ -77,7 +85,7 @@ const SearchBar = ({ searchCallback }) => {
           id={"suggestion" + index}
           key={index}
           onMouseOver={() => setActiveSelection(index)}
-          onMouseDown={() => handleGetRelatedArtists(suggestion)}>{suggestion}</div>
+          onMouseDown={() => handleSearch(suggestion)}>{suggestion}</div>
       ))}
     </div>
   );

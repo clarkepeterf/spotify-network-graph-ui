@@ -3,6 +3,7 @@
   display: grid;
   grid-template-columns: 310px auto;
 }
+
 .app-hide-side {
   height: 100%;
   display: grid;
