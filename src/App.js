@@ -9,7 +9,7 @@ const App = () => {
   const [error, setError] = useState(null);
   const [graph, setGraph] = useState({ nodes: [], edges: [] });
   const [graphInitialArtist, setGraphInitialArtist] = useState(null);
-  const [degreesOfSeparation, setDegreesOfSeparation] = useState(1);
+  const [degreesOfSeparation, setDegreesOfSeparation] = useState(2);
   const [artistInFocus, setArtistInFocus] = useState(null);
   const [artistInFocusError, setArtistInFocusError] = useState(null);
 
