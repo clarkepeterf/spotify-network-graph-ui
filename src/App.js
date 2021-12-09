@@ -51,7 +51,7 @@ const App = () => {
           searchSuggestionCallback={getSpotifySuggestions}
           searchPlaceholderText={"Search for an Artist to Create a Graph"} />
         <div className="graph">
-          <MemoizedGraph initialArtist={graphInitialArtist} graph={graph} nodeSelectCallback={handleGetArtistById}></MemoizedGraph>
+          <MemoizedGraph initialArtist={graphInitialArtist} graph={graph} artistSelectedCallback={handleGetArtistById}></MemoizedGraph>
         </div>
       </div>
     );

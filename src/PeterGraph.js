@@ -4,7 +4,7 @@ import "./PeterGraph.css";
 import { updateRelatedArtistGraph } from "./Api";
 import SearchBar from "./SearchBar";
 
-const PeterGraph = ({ graph, nodeSelectCallback }) => {
+const PeterGraph = ({ graph, artistSelectedCallback }) => {
   const container = useRef(null);
   const networkRef = useRef(null);
   const nodes = new DataSet(graph.nodes);
@@ -84,7 +84,8 @@ const PeterGraph = ({ graph, nodeSelectCallback }) => {
       networkRef.current.selectNodes([node.value.id]);
       const focusOptions = {
         scale: 1.5
-      }
+      };
+      artistSelectedCallback(node.value.id);
       networkRef.current.focus(node.value.id, focusOptions);
     }
   }
@@ -133,7 +134,7 @@ const PeterGraph = ({ graph, nodeSelectCallback }) => {
     const network = new Network(container.current, data, options);
     networkRef.current = network;
     network.on("selectNode", (selectNodeEvent) => {
-      nodeSelectCallback(selectNodeEvent.nodes[0]);
+      artistSelectedCallback(selectNodeEvent.nodes[0]);
     });
     network.on("doubleClick", (doubleClickEvent) => {
       const { nodes, pointer } = doubleClickEvent;
