@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import './SearchBar.css';
 
 const SearchBar = ({ searchCallback, suggestionCallback, placeholderText }) => {
   const [searchString, setSearchString] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [activeSelection, setActiveSelection] = useState(-1);
+  const inputElement = useRef();
 
   const handleInputChange = async (newInput) => {
     setSearchString(newInput);
@@ -24,6 +25,7 @@ const SearchBar = ({ searchCallback, suggestionCallback, placeholderText }) => {
     if (searchString && searchString.length > 0) {
       searchCallback(searchString);
     }
+    inputElement.current.blur();
   }
 
   const handleKeyDown = (key) => {
@@ -69,6 +71,7 @@ const SearchBar = ({ searchCallback, suggestionCallback, placeholderText }) => {
     <div className="search-box" onMouseOut={() => setActiveSelection(-1)}>
       <form action="." onSubmit={(e) => { e.preventDefault() }}>
         <input
+          ref={inputElement}
           type="search"
           className="search-input"
           placeholder={placeholderText}
