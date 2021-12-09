@@ -105,7 +105,11 @@ const PeterGraph = ({ graph, nodeSelectCallback }) => {
           enabled: false
         }
       },
-      color: "#7299fc",
+      color: {
+        color: "#7299fc",
+        highlight: "#fc9972",
+        hover: "#7299fc",
+      },
       smooth: {
         type: 'continuous',
         roundness: 0.5
