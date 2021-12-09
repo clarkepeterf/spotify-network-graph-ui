@@ -4,7 +4,7 @@ import "./PeterGraph.css";
 import { updateRelatedArtistGraph } from "./Api";
 import SearchBar from "./SearchBar";
 
-const PeterGraph = ({ graph, artistSelectedCallback }) => {
+const PeterGraph = ({ graph, artistSelectedCallback, windowResizeCallback }) => {
   const container = useRef(null);
   const networkRef = useRef(null);
   const nodes = new DataSet(graph.nodes);
@@ -146,6 +146,7 @@ const PeterGraph = ({ graph, artistSelectedCallback }) => {
     })
     network.setSize(container.current.clientWidth, container.current.clientHeight);
     updateTrie(graph.nodes);
+    windowResizeCallback(network, container.current);
   });
 
   const updateGraph = async (id, x, y) => {
