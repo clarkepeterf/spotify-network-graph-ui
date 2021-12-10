@@ -10,3 +10,14 @@
 .howToUse {
   margin-top: 50px;
 }
+
+.landscapeWarning{
+  background-color: gold;
+  color:black;
+}
+
+@media only screen and (min-width:600px){
+  .landscapeWarning{
+    display: none;
+  }
+}

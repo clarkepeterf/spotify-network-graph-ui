@@ -6,6 +6,7 @@ const SideBar = ({ artistInFocus, toggleClickCallback, searchCallback, searchSug
         <div>
             <div className="side-bar">
                 <h3 className="side-bar-title">Spotify Network Graph</h3>
+                <h4 className="landscapeWarning">&#8635; App works better in landscape mode or wide browser window</h4>
                 <div>Initial Graph Size:</div>
                 <div onChange={() => toggleClickCallback()}>
                     <input id="small-button" className="radioButton" type="radio" value="small" name="graphSize" /> <label htmlFor="small-button"> Immediate Connections </label>

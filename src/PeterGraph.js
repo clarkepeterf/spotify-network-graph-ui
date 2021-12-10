@@ -5,6 +5,8 @@ import { updateRelatedArtistGraph } from "./Api";
 import SearchBar from "./SearchBar";
 
 const PeterGraph = ({ graph, artistSelectedCallback }) => {
+  const prevContainerWidthRef = useRef(0);
+  const prevContainerHeightRef = useRef(0);
   const container = useRef(null);
   const networkRef = useRef(null);
   const nodes = new DataSet(graph.nodes);
@@ -147,6 +149,21 @@ const PeterGraph = ({ graph, artistSelectedCallback }) => {
     network.setSize(container.current.clientWidth, container.current.clientHeight);
     updateTrie(graph.nodes);
   });
+
+  useEffect(() => {
+    prevContainerWidthRef.current = container.current.clientWidth;
+    prevContainerHeightRef.current = container.current.clientHeight;
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    }
+  });
+
+  const handleResize = () => {
+    if (container.current.clientWidth !== prevContainerWidthRef.current || container.current.clientHeight !== prevContainerHeightRef.current) {
+      networkRef.current && networkRef.current.setSize(container.current.clientWidth, container.current.clientHeight) && networkRef.current.fit();
+    }
+  }
 
   const updateGraph = async (id, x, y) => {
     try {
