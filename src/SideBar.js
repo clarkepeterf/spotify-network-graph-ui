@@ -8,9 +8,9 @@ const SideBar = ({ artistInFocus, toggleClickCallback, searchCallback, searchSug
                 <h3 className="side-bar-title">Spotify Network Graph</h3>
                 <div>Initial Graph Size:</div>
                 <div onChange={() => toggleClickCallback()}>
-                    <input id="small-button" className="radioButton" type="radio" value="small" name="graphSize" /> <label for="small-button"> Immediate Connections </label>
+                    <input id="small-button" className="radioButton" type="radio" value="small" name="graphSize" /> <label htmlFor="small-button"> Immediate Connections </label>
                     <div />
-                    <input id="large-button" className="radioButton" type="radio" value="large" name="graphSize" defaultChecked /> <label for="large-button"> Secondary Connections </label>
+                    <input id="large-button" className="radioButton" type="radio" value="large" name="graphSize" defaultChecked /> <label htmlFor="large-button"> Secondary Connections </label>
                 </div>
                 <SearchBar searchCallback={searchCallback} suggestionCallback={searchSuggestionCallback} placeholderText={searchPlaceholderText}></SearchBar>
                 <div className="howToUse">
