@@ -3,11 +3,33 @@
   background-color: hsl(0, 0%, 11%);
 }
 
-.search-box{
+.inGraphSearch{
   position: absolute;
   z-index: 100;
+  margin-top: 100px;
+  margin-left: 10px;
+}
+.test{
+  position: absolute;
+  z-index: 100;
+  margin-top:25px;
+  margin-left: 10px
 }
 
 .graph-wrapper{
   height: 100%;
+}
+
+#small-button, #small-button-label{
+  position:absolute;
+  z-index: 100;
+  margin-top: 25px;
+  color: white;
+}
+
+#large-button, #large-button-label{
+  position:absolute;
+  z-index: 100;
+  margin-top: 50px;
+  color:white;
 }

@@ -1,8 +1,13 @@
 import React, { useState, useCallback } from "react";
 import SideBar from "./SideBar";
+import SearchBar from "./SearchBar";
 import "./App.css"
 import MemoizedGraph from "./MemoizedGraph";
 import { getArtistById, getArtistByName, getRelatedArtistGraph, getSpotifySuggestions } from "./Api"
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSearch, faPlus, faTimes } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faSearch, faPlus, faTimes);
 
 const App = () => {
 
@@ -43,13 +48,7 @@ const App = () => {
   } else {
     return (
       <div className="app">
-        <SideBar
-          artistInFocus={artistInFocus}
-          artistInFocusError={artistInFocusError}
-          toggleClickCallback={toggleDegreesOfSeparation}
-          searchCallback={handleSearch}
-          searchSuggestionCallback={getSpotifySuggestions}
-          searchPlaceholderText={"Search Artist to Create a Graph"} />
+        {/* <SearchBar className="createSearch" searchCallback={handleSearch} suggestionCallback={getSpotifySuggestions} placeholderText={"Search Artist to Create Graph"}></SearchBar> */}
         <div className="graph">
           <MemoizedGraph initialArtist={graphInitialArtist} graph={graph} artistSelectedCallback={handleGetArtistById}></MemoizedGraph>
         </div>

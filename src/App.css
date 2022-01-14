@@ -1,7 +1,5 @@
 .app {
   height: 100%;
-  display: grid;
-  grid-template-columns: 260px minmax(300px, auto);
 }
 
 .app-hide-side {
@@ -12,4 +10,9 @@
 
 .graph {
   margin: 2px;
+}
+
+.createSearch{
+  position:absolute;
+  z-index: 100;
 }

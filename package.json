@@ -4,6 +4,9 @@
   "private": true,
   "homepage": "https://www.peterclarke.org/spotify-network-graph",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.16",
     "@material-ui/core": "^4.11.3",
     "@primer/octicons-react": "^12.1.0",
     "@testing-library/jest-dom": "^5.11.10",
@@ -14,9 +17,11 @@
     "react-bootstrap": "^1.5.2",
     "react-dom": "^17.0.2",
     "react-graph-vis": "^1.0.7",
-    "react-scripts": "4.0.3",
     "vis-network": "^9.0.4",
     "web-vitals": "^1.1.1"
+  },
+  "devDependencies": {
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",

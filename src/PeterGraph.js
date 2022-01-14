@@ -1,17 +1,20 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DataSet, Network } from "vis-network/standalone";
 import "./PeterGraph.css";
-import { updateRelatedArtistGraph } from "./Api";
+import { updateRelatedArtistGraph, getRelatedArtistGraph, getSpotifySuggestions } from "./Api";
 import SearchBar from "./SearchBar";
 
-const PeterGraph = ({ graph, artistSelectedCallback }) => {
+const PeterGraph = ({ artistSelectedCallback }) => {
   const prevContainerWidthRef = useRef(0);
   const prevContainerHeightRef = useRef(0);
   const container = useRef(null);
   const networkRef = useRef(null);
-  const nodes = new DataSet(graph.nodes);
-
-  const edges = new DataSet(graph.edges);
+  const [graph, setGraph] = useState({ nodes: [], edges: [] });
+  const graphDataSets = {
+    nodes: new DataSet(graph.nodes),
+    edges: new DataSet(graph.edges),
+  };
+  const [error, setError] = useState(null);
 
   const trie =
   {
@@ -93,8 +96,8 @@ const PeterGraph = ({ graph, artistSelectedCallback }) => {
   }
 
   const data = {
-    nodes: nodes,
-    edges: edges
+    nodes: graphDataSets.nodes,
+    edges: graphDataSets.edges,
   };
   const options = {
     layout: {
@@ -165,18 +168,35 @@ const PeterGraph = ({ graph, artistSelectedCallback }) => {
     }
   }
 
+  const handleSearch = async (searchString) => {
+    try {
+      const relatedArtistGraph = await getRelatedArtistGraph(searchString, 2/*TODO: change to degrees of separation*/);
+      setGraph(relatedArtistGraph);
+      // const artist = await getArtistByName(searchString);
+      // setArtistInFocus(artist);
+      // setGraphInitialArtist(artist);
+    } catch (error) {
+      setError(error)
+    }
+  }
+
   const updateGraph = async (id, x, y) => {
     try {
-      const updates = await updateRelatedArtistGraph(nodes.get(), edges.get(), id, x, y);
-      updates.nodes && nodes.add(updates.nodes) && updateTrie(updates.nodes);
-      updates.edges && edges.add(updates.edges);
+      const updates = await updateRelatedArtistGraph(graphDataSets.nodes.get(), graphDataSets.edges.get(), id, x, y);
+      updates.nodes && graphDataSets.nodes.add(updates.nodes) && updateTrie(updates.nodes);
+      updates.edges && graphDataSets.edges.add(updates.edges);
     } catch (error) {
       console.log(error);
     }
   }
   return (
     <div className="graph-wrapper">
-      <SearchBar searchCallback={highlightArtistWithName} suggestionCallback={getArtistsWithPrefix} placeholderText={"Search Artists within the Graph"} />
+      <div className="createSearch">
+        <SearchBar className={"test"} searchCallback={handleSearch} suggestionCallback={getSpotifySuggestions} placeholderText={"Search Artist to Create Graph"} fontAwesomeIcon={["fas", "plus"]}></SearchBar>
+      </div>
+      {/* <input id="small-button" className="radioButton" type="radio" value="small" name="graphSize" /> <label id="small-button-label" htmlFor="small-button"> Immediate Connections </label>
+      <input id="large-button" className="radioButton" type="radio" value="large" name="graphSize" defaultChecked /> <label id="large-button-label" htmlFor="large-button"> Secondary Connections </label> */}
+      <SearchBar className={"inGraphSearch"} searchCallback={highlightArtistWithName} suggestionCallback={getArtistsWithPrefix} placeholderText={"Search Artists within the Graph"} fontAwesomeIcon={["fas", "search"]} />
       <div className="PeterGraph" id="mynetwork" ref={container}>Graph</div>
     </div>
   );

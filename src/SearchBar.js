@@ -1,11 +1,31 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './SearchBar.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const SearchBar = ({ searchCallback, suggestionCallback, placeholderText }) => {
+
+const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderText, fontAwesomeIcon }) => {
   const [searchString, setSearchString] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [activeSelection, setActiveSelection] = useState(-1);
-  const inputElement = useRef();
+  const inputElement = useRef(null);
+  const [isCloseIcon, setIsCloseIcon] = useState(false);
+  const closeIcon = ["fas", "times"];
+
+  useEffect(() => {
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseover', handleMouseOver);
+    return () => {
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseover', handleMouseOver);
+    }
+  });
+
+  function handleMouseDown(e) {
+    console.log("mousedown target:", e.target);
+  }
+  function handleMouseOver(e) {
+    console.log("mouseover target:", e.target);
+  }
 
   const handleInputChange = async (newInput) => {
     setSearchString(newInput);
@@ -62,36 +82,60 @@ const SearchBar = ({ searchCallback, suggestionCallback, placeholderText }) => {
     }
   }
 
-  const handleBlur = () => {
+  const handleInputFocus = () => {
+    handleInputChange(searchString)
+  }
+
+  const handleInputBlur = () => {
     setSuggestions([]);
     setActiveSelection(-1);
+    setIsCloseIcon(false);
+  }
+
+  const handleButtonClick = () => {
+    if (!isCloseIcon) {
+      inputElement.current.focus();
+    } else {
+      inputElement.current.blur();
+    }
+    setIsCloseIcon(!isCloseIcon);
   }
 
   return (
-    <div className="search-box" onMouseOut={() => setActiveSelection(-1)}>
-      <form action="." onSubmit={(e) => { e.preventDefault() }}>
-        <input
-          ref={inputElement}
-          type="search"
-          className="search-input"
-          placeholder={placeholderText}
-          value={searchString}
-          onChange={(e) => handleInputChange(e.target.value)}
-          onKeyPress={(e) => handleKeyPress(e.key)}
-          onBlur={() => handleBlur()}
-          onFocus={() => handleInputChange(searchString)}
-          onKeyDown={(e) => handleKeyDown(e.key)}
-          onMouseOver={() => setActiveSelection(-1)}
-        />
-      </form>
-      {suggestions && suggestions.length > 0 && suggestions.map((suggestion, index) => (
-        <div
-          className={index === activeSelection ? "input-suggestion-active" : "input-suggestion"}
-          id={"suggestion" + index}
-          key={index}
-          onMouseOver={() => setActiveSelection(index)}
-          onMouseDown={() => handleSearch(suggestion)}>{suggestion}</div>
-      ))}
+    <div className={className}>
+      <div className="boxAndIcon">
+        <button onMouseDown={(e) => { e.preventDefault() }} onClick={() => { handleButtonClick() }} >
+          <FontAwesomeIcon
+            icon={isCloseIcon ? closeIcon : fontAwesomeIcon} size="lg" />
+        </button>
+        <div className="search-box" onMouseOut={() => setActiveSelection(-1)}>
+          <form action="." onSubmit={(e) => { e.preventDefault() }}>
+            <input
+              tabIndex={-1}
+              ref={inputElement}
+              type="search"
+              className="search-input"
+              placeholder={placeholderText}
+              value={searchString}
+              onChange={(e) => handleInputChange(e.target.value)}
+              onKeyPress={(e) => handleKeyPress(e.key)}
+              onBlur={() => handleInputBlur()}
+              onFocus={() => handleInputFocus()}
+              onKeyDown={(e) => handleKeyDown(e.key)}
+              onMouseOver={() => setActiveSelection(-1)}
+            />
+          </form>
+          {suggestions && suggestions.length > 0 && <div className={"input-suggestion blank"}></div>}
+          {suggestions && suggestions.length > 0 && suggestions.map((suggestion, index) => (
+            <div
+              className={index === activeSelection ? "input-suggestion-active" : "input-suggestion"}
+              id={"suggestion" + index}
+              key={index}
+              onMouseOver={() => setActiveSelection(index)}
+              onMouseDown={() => handleSearch(suggestion)}>{suggestion}</div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }

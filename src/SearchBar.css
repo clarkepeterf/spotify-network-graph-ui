@@ -19,7 +19,13 @@
   width: 100%;
   margin: 0%;
   padding-left: 1%;
-  z-index: 100;
+  z-index: 200;
+  height: 30px;
+  display: block;
+}
+
+.input-suggestion.blank{
+  border-bottom:black
 }
 
 .input-suggestion-active {
@@ -29,7 +35,9 @@
   margin: 0%;
   padding-left: 1%;
   background-color: #d4d4d4;
-  z-index: 100;
+  z-index: 200;
+  height: 30px;
+  display: block;
 }
 
 #suggestion0 {
@@ -37,7 +45,8 @@
 }
 
 .search-box {
-  opacity: 1;
+  display:inline-block;
+  opacity: 0;
   border-color: #a3a3a3;
   border-style: solid;
   border-width: 1px;
@@ -45,9 +54,33 @@
   padding: 0px;
   margin: 2px;
   overflow: hidden;
-  position: absolute;
-  z-index: 99;
-  width: 250px;
+  width: 0px;
   background-color: #f8f8ff;
   color: black;
+  transition: opacity,width 0.1s;
+  pointer-events: none;
+}
+
+.boxAndIcon{
+  white-space: nowrap;
+}
+
+.search-box:focus-within{
+  opacity: 1;
+  width: 250px;
+}
+
+button{
+  vertical-align: top;
+  background-color: hsl(0, 0%, 35%);
+  color: hsla(0, 0%, 99%, 1);
+  border:none;
+  border-radius: 20%;
+  height: 30px;
+  cursor: pointer;
+  width: 30px;
+}
+
+button:hover{
+  background-color: hsl(0, 0%, 30%);
 }
