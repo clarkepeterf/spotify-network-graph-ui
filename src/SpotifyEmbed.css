@@ -1,0 +1,14 @@
+iframe{
+    border-radius: 6px;
+}
+
+.chevronWrapper{
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    background-color: hsl(0, 0%, 35%);
+    opacity: 100%;
+}
+.chevronWrapper>span{
+    background-color: hsl(0, 0%, 35%);
+    width: 300px;
+}

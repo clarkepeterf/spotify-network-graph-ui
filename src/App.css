@@ -11,8 +11,3 @@
 .graph {
   margin: 2px;
 }
-
-.createSearch{
-  position:absolute;
-  z-index: 100;
-}

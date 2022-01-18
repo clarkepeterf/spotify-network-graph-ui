@@ -3,29 +3,20 @@ import './SearchBar.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderText, fontAwesomeIcon }) => {
+const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderText, fontAwesomeIcon, startOpen }) => {
   const [searchString, setSearchString] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [activeSelection, setActiveSelection] = useState(-1);
   const inputElement = useRef(null);
   const [isCloseIcon, setIsCloseIcon] = useState(false);
   const closeIcon = ["fas", "times"];
+  const buttonElement = useRef(null);
 
   useEffect(() => {
-    window.addEventListener('mousedown', handleMouseDown);
-    window.addEventListener('mouseover', handleMouseOver);
-    return () => {
-      window.removeEventListener('mousedown', handleMouseDown);
-      window.removeEventListener('mouseover', handleMouseOver);
+    if (startOpen) {
+      buttonElement.current.click()
     }
-  });
-
-  function handleMouseDown(e) {
-    console.log("mousedown target:", e.target);
-  }
-  function handleMouseOver(e) {
-    console.log("mouseover target:", e.target);
-  }
+  }, [startOpen])
 
   const handleInputChange = async (newInput) => {
     setSearchString(newInput);
@@ -64,7 +55,6 @@ const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderT
   }
 
   const handleKeyPress = (key) => {
-    console.log(key);
     switch (key) {
       case 'Enter':
         if (activeSelection > -1) {
@@ -104,7 +94,7 @@ const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderT
   return (
     <div className={className}>
       <div className="boxAndIcon">
-        <button onMouseDown={(e) => { e.preventDefault() }} onClick={() => { handleButtonClick() }} >
+        <button ref={buttonElement} title={placeholderText} onMouseDown={(e) => { e.preventDefault() }} onClick={() => { handleButtonClick() }} >
           <FontAwesomeIcon
             icon={isCloseIcon ? closeIcon : fontAwesomeIcon} size="lg" />
         </button>

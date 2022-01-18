@@ -1,4 +1,4 @@
-const ec2Url = 'https://www.peterclarke.org/spotify-network-graph-api';
+const ec2Url = 'http://localhost:8080/spotify-network-graph-api';
 
 const simpleGet = async (url) => {
   const response = await fetch(encodeURI(url));
@@ -25,26 +25,12 @@ const getArtistByName = async (name) => {
   const artist = await simpleGet(`${ec2Url}/artist?name=${name}`);
   return artist;
 }
+
 export { getArtistByName };
 
-const getRelatedArtistGraph = async (searchString, degreesOfSeparation) => {
-  const graph = await simpleGet(`${ec2Url}/graph?searchString=${searchString}&degreesOfSeparation=${degreesOfSeparation}`);
-  return graph;
+const getRelatedArtists = async (id) => {
+  const relatedArtists = await simpleGet(`${ec2Url}/related/${id}`);
+  return relatedArtists;
 }
-export { getRelatedArtistGraph }
 
-const updateRelatedArtistGraph = async (nodes, edges, id, x, y) => {
-  const response = await fetch(`${ec2Url}/update?id=${id}&x=${x}&y=${y}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ nodes: nodes, edges: edges })
-  });
-  if (!response.ok) {
-    throw Error(response.statusText);
-  }
-  const updates = await response.json();
-  return updates;
-}
-export { updateRelatedArtistGraph };
+export { getRelatedArtists };

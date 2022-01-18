@@ -1,20 +1,27 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { DataSet, Network } from "vis-network/standalone";
 import "./PeterGraph.css";
-import { updateRelatedArtistGraph, getRelatedArtistGraph, getSpotifySuggestions } from "./Api";
+import { getRelatedArtists, getArtistByName, getSpotifySuggestions } from "./Api";
 import SearchBar from "./SearchBar";
+import { networkOptions } from "./NetworkOptions"
+import SpotifyEmbed from "./SpotifyEmbed";
 
-const PeterGraph = ({ artistSelectedCallback }) => {
+const PeterGraph = () => {
   const prevContainerWidthRef = useRef(0);
   const prevContainerHeightRef = useRef(0);
-  const container = useRef(null);
+  const containerRef = useRef(null);
   const networkRef = useRef(null);
-  const [graph, setGraph] = useState({ nodes: [], edges: [] });
+  const setArtistRef = useRef(null);
+  const setContainerHeightRef = useRef(null);
   const graphDataSets = {
-    nodes: new DataSet(graph.nodes),
-    edges: new DataSet(graph.edges),
+    nodes: new DataSet([]),
+    edges: new DataSet([]),
   };
-  const [error, setError] = useState(null);
+
+  function storeSetStateRefs(artistFunc, containerHeightFunc) {
+    setArtistRef.current = artistFunc
+    setContainerHeightRef.current = containerHeightFunc
+  }
 
   const trie =
   {
@@ -22,40 +29,39 @@ const PeterGraph = ({ artistSelectedCallback }) => {
     value: null,
   };
 
-  const updateTrie = (artists) => {
-    for (const artist of artists) {
-      let node = trie;
-      for (const char of artist.title) {
-        // Always add with lower case letters
-        //When searching tree we will also convert to lowercase to make searching case insensitive
-        const lowerChar = char.toLowerCase();
-        if (!(lowerChar in node.children)) {
-          node.children[lowerChar] =
-          {
-            children: {},
-            value: null,
-          }
+  const degreesOfSeparation = 2;
+
+  const updateTrie = (artist) => {
+    let node = trie;
+    for (const char of artist.label) {
+      // Always add with lower case letters
+      //When searching tree we will also convert to lowercase to make searching case insensitive
+      const lowerChar = char.toLowerCase();
+      if (!(lowerChar in node.children)) {
+        node.children[lowerChar] =
+        {
+          children: {},
+          value: null,
         }
-        node = node.children[lowerChar];
       }
-      node.value = artist;
+      node = node.children[lowerChar];
     }
+    node.value = artist;
   };
 
   const getArtistsWithPrefix = (prefix) => {
     // Always get based on lowercase letters (trie expects lower case letters)
     const lowerCasePrefix = prefix.toLowerCase();
     const results = [];
-    const startNode = getNodeWithPrefix(lowerCasePrefix);
+    const startNode = getTrieNodeWithPrefix(lowerCasePrefix);
     collectValuesMatchingPrefix(startNode, lowerCasePrefix, results);
-    console.log({ results });
     // Limit results to 20
     if (results.length > 20) {
       return results.slice(0, 20)
     } else return results;
   }
 
-  const getNodeWithPrefix = (prefix) => {
+  const getTrieNodeWithPrefix = (prefix) => {
     // Always get based on lower case letters (trie expects lower case letters)
     const lowerCasePrefix = prefix.toLowerCase();
     let node = trie;
@@ -74,7 +80,7 @@ const PeterGraph = ({ artistSelectedCallback }) => {
       return;
     }
     if (node.value !== null) {
-      results.push(node.value.title);
+      results.push(node.value.label);
     }
     const childKeys = Object.keys(node.children);
     for (const char of childKeys) {
@@ -84,78 +90,43 @@ const PeterGraph = ({ artistSelectedCallback }) => {
   }
 
   const highlightArtistWithName = (name) => {
-    const node = getNodeWithPrefix(name);
-    if (node.value && node.value.id && networkRef.current) {
-      networkRef.current.selectNodes([node.value.id]);
+    const trieNode = getTrieNodeWithPrefix(name);
+    if (trieNode.value && trieNode.value.id && networkRef.current) {
+      networkRef.current.selectNodes([trieNode.value.id]);
+      setContainerHeightRef.current(containerRef.current.clientHeight)
+      setArtistRef.current(trieNode.value)
       const focusOptions = {
         scale: 1.5
       };
-      artistSelectedCallback(node.value.id);
-      networkRef.current.focus(node.value.id, focusOptions);
+      networkRef.current.focus(trieNode.value.id, focusOptions);
     }
   }
 
-  const data = {
-    nodes: graphDataSets.nodes,
-    edges: graphDataSets.edges,
-  };
-  const options = {
-    layout: {
-      hierarchical: false,
-      improvedLayout: false
-    },
-    clickToUse: false,
-    edges: {
-      arrows: {
-        to: {
-          enabled: false
-        }
-      },
-      color: {
-        color: "#7299fc",
-        highlight: "#fc9972",
-        hover: "#7299fc",
-      },
-      smooth: {
-        type: 'continuous',
-        roundness: 0.5
-      }
-    },
-    nodes: {
-      font: {
-        bold: "true",
-        color: "#fcfcfc"
-      }
-    },
-    physics: {
-      barnesHut: {
-        avoidOverlap: 1,
-        gravitationalConstant: -50000,
-      }
-    }
-  };
-
   useEffect(() => {
-    const network = new Network(container.current, data, options);
+    const network = new Network(containerRef.current, graphDataSets, networkOptions);
     networkRef.current = network;
     network.on("selectNode", (selectNodeEvent) => {
-      artistSelectedCallback(selectNodeEvent.nodes[0]);
-    });
-    network.on("doubleClick", (doubleClickEvent) => {
-      const { nodes, pointer } = doubleClickEvent;
-      if (nodes && nodes.length === 1 && pointer) {
-        const x = Math.round(pointer.canvas.x);
-        const y = Math.round(pointer.canvas.y);
-        updateGraph(nodes[0], x, y);
+      const nodes = selectNodeEvent.nodes;
+      if (nodes && nodes.length === 1) {
+        const selectedArtist = graphDataSets.nodes.get(nodes[0])
+        setContainerHeightRef.current(containerRef.current.clientHeight)
+        setArtistRef.current(selectedArtist)
       }
     })
-    network.setSize(container.current.clientWidth, container.current.clientHeight);
-    updateTrie(graph.nodes);
+    network.on("doubleClick", (doubleClickEvent) => {
+      const nodes = doubleClickEvent.nodes;
+      if (nodes && nodes.length === 1) {
+        addRelatedArtists(nodes[0], 1).then(() => {
+          networkRef.current.selectNodes([nodes[0]]);
+        });
+      }
+    })
+    network.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
   });
 
   useEffect(() => {
-    prevContainerWidthRef.current = container.current.clientWidth;
-    prevContainerHeightRef.current = container.current.clientHeight;
+    prevContainerWidthRef.current = containerRef.current.clientWidth;
+    prevContainerHeightRef.current = containerRef.current.clientHeight;
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -163,41 +134,73 @@ const PeterGraph = ({ artistSelectedCallback }) => {
   });
 
   const handleResize = () => {
-    if (container.current.clientWidth !== prevContainerWidthRef.current || container.current.clientHeight !== prevContainerHeightRef.current) {
-      networkRef.current && networkRef.current.setSize(container.current.clientWidth, container.current.clientHeight) && networkRef.current.fit();
+    if (containerRef.current.clientWidth !== prevContainerWidthRef.current || containerRef.current.clientHeight !== prevContainerHeightRef.current) {
+      networkRef.current && networkRef.current.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight) && networkRef.current.fit();
+      containerRef.current && setContainerHeightRef.current(containerRef.current.clientHeight)
     }
+  }
+
+  const convertArtistToNode = (artist) => {
+    const images = artist.images
+    return {
+      id: artist.id,
+      label: artist.name,
+      image: images.length > 0 ? images[images.length - 1].url : "https://upload.wikimedia.org/wikipedia/commons/2/25/Icon-round-Question_mark.jpg",
+    }
+  }
+
+  const addRelatedArtists = async (artistId, degreesOfSeparation) => {
+    if (degreesOfSeparation > 0) {
+      const { x, y } = networkRef.current.getPosition(artistId);
+      const relatedArtists = await getRelatedArtists(artistId);
+      for (const relatedArtist of relatedArtists) {
+        const relatedNode = convertArtistToNodeWithXY(relatedArtist, x, y)
+        addNode(relatedNode)
+        graphDataSets.edges.add({
+          from: artistId,
+          to: relatedArtist.id,
+        })
+        addRelatedArtists(relatedArtist.id, degreesOfSeparation - 1)
+      }
+    }
+  }
+
+  const convertArtistToNodeWithXY = (artist, x, y) => {
+    return {
+      ...convertArtistToNode(artist),
+      x: x,
+      y: y,
+    }
+  }
+
+  const addNode = (node) => {
+    const existingNode = graphDataSets.nodes.get(node.id)
+    if (!existingNode) {
+      graphDataSets.nodes.add(node)
+    }
+    updateTrie(node)
   }
 
   const handleSearch = async (searchString) => {
-    try {
-      const relatedArtistGraph = await getRelatedArtistGraph(searchString, 2/*TODO: change to degrees of separation*/);
-      setGraph(relatedArtistGraph);
-      // const artist = await getArtistByName(searchString);
-      // setArtistInFocus(artist);
-      // setGraphInitialArtist(artist);
-    } catch (error) {
-      setError(error)
-    }
+    const initialArtist = await getArtistByName(searchString);
+    const initialNode = convertArtistToNode(initialArtist);
+    addNode(initialNode);
+    addRelatedArtists(initialArtist.id, degreesOfSeparation).then(() => {
+      networkRef.current.selectNodes([initialArtist.id]);
+      setContainerHeightRef.current(containerRef.current.clientHeight)
+      setArtistRef.current(initialArtist)
+    });
   }
 
-  const updateGraph = async (id, x, y) => {
-    try {
-      const updates = await updateRelatedArtistGraph(graphDataSets.nodes.get(), graphDataSets.edges.get(), id, x, y);
-      updates.nodes && graphDataSets.nodes.add(updates.nodes) && updateTrie(updates.nodes);
-      updates.edges && graphDataSets.edges.add(updates.edges);
-    } catch (error) {
-      console.log(error);
-    }
-  }
   return (
     <div className="graph-wrapper">
-      <div className="createSearch">
-        <SearchBar className={"test"} searchCallback={handleSearch} suggestionCallback={getSpotifySuggestions} placeholderText={"Search Artist to Create Graph"} fontAwesomeIcon={["fas", "plus"]}></SearchBar>
-      </div>
+      <SearchBar className={"testNewButton"} searchCallback={() => { }} suggestionCallback={() => { }} placeholderText={"test"} fontAwesomeIcon={["fas", "bars"]} />
+      <SearchBar className={"addToGraph"} searchCallback={handleSearch} suggestionCallback={getSpotifySuggestions} placeholderText={"Add Artist"} fontAwesomeIcon={["fas", "plus"]} startOpen={true}></SearchBar>
       {/* <input id="small-button" className="radioButton" type="radio" value="small" name="graphSize" /> <label id="small-button-label" htmlFor="small-button"> Immediate Connections </label>
       <input id="large-button" className="radioButton" type="radio" value="large" name="graphSize" defaultChecked /> <label id="large-button-label" htmlFor="large-button"> Secondary Connections </label> */}
-      <SearchBar className={"inGraphSearch"} searchCallback={highlightArtistWithName} suggestionCallback={getArtistsWithPrefix} placeholderText={"Search Artists within the Graph"} fontAwesomeIcon={["fas", "search"]} />
-      <div className="PeterGraph" id="mynetwork" ref={container}>Graph</div>
+      <SearchBar className={"inGraphSearch"} searchCallback={highlightArtistWithName} suggestionCallback={getArtistsWithPrefix} placeholderText={"Search Graph's Artists"} fontAwesomeIcon={["fas", "search"]} />
+      <SpotifyEmbed storeSetStateCallback={storeSetStateRefs} />
+      <div className="PeterGraph" id="mynetwork" ref={containerRef}>Graph</div>
     </div>
   );
 }
