@@ -4,8 +4,11 @@ import "./SpotifyEmbed.css"
 export default function SpotifyEmbed({ storeSetStateCallback }) {
     const [artist, setArtist] = useState(null)
     const [containerHeight, setContainerHeight] = useState(0);
-    //should be either "small" or "large"
     const [embedSize, setEmbedSize] = useState("small")
+
+    if (containerHeight <= 500 && embedSize !== "small") {
+        setEmbedSize("small")
+    }
 
     storeSetStateCallback(setArtist, setContainerHeight)
 
@@ -19,18 +22,17 @@ export default function SpotifyEmbed({ storeSetStateCallback }) {
             style={{
                 position: "absolute",
                 zIndex: 100,
-                marginTop: embedSize === "small" ? containerHeight - 100 : containerHeight - 420,
+                marginTop: embedSize === "small" ? containerHeight - 110 : containerHeight - 430,
                 transition: "margin-top 0.25s"
             }}
         >
             {artist && containerHeight > 500 &&
-                <div className={"chevronWrapper"} onClick={(e) => { toggleEmbedSize() }}>
+                <button className={"chevronWrapper"} onClick={(e) => { toggleEmbedSize() }}>
                     <FontAwesomeIcon
-                        style={{ float: "right" }}
                         icon={["fas", embedSize === "small" ? "chevron-up" : "chevron-down"]}
                         size="lg"
                     />
-                </div>
+                </button>
             }
             {artist &&
                 <iframe

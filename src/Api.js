@@ -1,4 +1,4 @@
-const ec2Url = 'http://localhost:8080/spotify-network-graph-api';
+const ec2Url = 'https://www.peterclarke.org/spotify-network-graph-api';
 
 const simpleGet = async (url) => {
   const response = await fetch(encodeURI(url));

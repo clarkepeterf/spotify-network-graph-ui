@@ -8,8 +8,7 @@ const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderT
   const [suggestions, setSuggestions] = useState([]);
   const [activeSelection, setActiveSelection] = useState(-1);
   const inputElement = useRef(null);
-  const [isCloseIcon, setIsCloseIcon] = useState(false);
-  const closeIcon = ["fas", "times"];
+  const [isOpen, setIsOpen] = useState(false);
   const buttonElement = useRef(null);
 
   useEffect(() => {
@@ -79,24 +78,24 @@ const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderT
   const handleInputBlur = () => {
     setSuggestions([]);
     setActiveSelection(-1);
-    setIsCloseIcon(false);
+    setIsOpen(false);
   }
 
   const handleButtonClick = () => {
-    if (!isCloseIcon) {
+    if (!isOpen) {
       inputElement.current.focus();
     } else {
       inputElement.current.blur();
     }
-    setIsCloseIcon(!isCloseIcon);
+    setIsOpen(!isOpen);
   }
 
   return (
     <div className={className}>
       <div className="boxAndIcon">
-        <button ref={buttonElement} title={placeholderText} onMouseDown={(e) => { e.preventDefault() }} onClick={() => { handleButtonClick() }} >
+        <button className="button" ref={buttonElement} title={placeholderText} onMouseDown={(e) => { e.preventDefault() }} onClick={() => { handleButtonClick() }} >
           <FontAwesomeIcon
-            icon={isCloseIcon ? closeIcon : fontAwesomeIcon} size="lg" />
+            icon={fontAwesomeIcon} size="lg" />
         </button>
         <div className="search-box" onMouseOut={() => setActiveSelection(-1)}>
           <form action="." onSubmit={(e) => { e.preventDefault() }}>

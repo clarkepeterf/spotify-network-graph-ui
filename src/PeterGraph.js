@@ -5,6 +5,8 @@ import { getRelatedArtists, getArtistByName, getSpotifySuggestions } from "./Api
 import SearchBar from "./SearchBar";
 import { networkOptions } from "./NetworkOptions"
 import SpotifyEmbed from "./SpotifyEmbed";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Menu from "./Menu"
 
 const PeterGraph = () => {
   const prevContainerWidthRef = useRef(0);
@@ -13,14 +15,24 @@ const PeterGraph = () => {
   const networkRef = useRef(null);
   const setArtistRef = useRef(null);
   const setContainerHeightRef = useRef(null);
+  const setMenuOpenRef = useRef(null);
   const graphDataSets = {
     nodes: new DataSet([]),
     edges: new DataSet([]),
   };
+  const numberOfStepsRef = useRef(null)
 
   function storeSetStateRefs(artistFunc, containerHeightFunc) {
     setArtistRef.current = artistFunc
     setContainerHeightRef.current = containerHeightFunc
+  }
+
+  function storeSetMenuOpenRef(menuOpenFunc) {
+    setMenuOpenRef.current = menuOpenFunc
+  }
+
+  function setNumberOfStepsRef(numberOfSteps) {
+    numberOfStepsRef.current = numberOfSteps
   }
 
   const trie =
@@ -28,8 +40,6 @@ const PeterGraph = () => {
     children: {},
     value: null,
   };
-
-  const degreesOfSeparation = 2;
 
   const updateTrie = (artist) => {
     let node = trie;
@@ -133,7 +143,9 @@ const PeterGraph = () => {
     }
   });
 
-  const handleResize = () => {
+  const handleResize = async (event) => {
+    console.log("prev:", { width: prevContainerWidthRef, height: prevContainerHeightRef })
+    console.log("curr:", { width: containerRef.current.clientWidth, height: containerRef.current.clientHeight })
     if (containerRef.current.clientWidth !== prevContainerWidthRef.current || containerRef.current.clientHeight !== prevContainerHeightRef.current) {
       networkRef.current && networkRef.current.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight) && networkRef.current.fit();
       containerRef.current && setContainerHeightRef.current(containerRef.current.clientHeight)
@@ -185,20 +197,31 @@ const PeterGraph = () => {
     const initialArtist = await getArtistByName(searchString);
     const initialNode = convertArtistToNode(initialArtist);
     addNode(initialNode);
-    addRelatedArtists(initialArtist.id, degreesOfSeparation).then(() => {
+    addRelatedArtists(initialArtist.id, numberOfStepsRef.current).then(() => {
       networkRef.current.selectNodes([initialArtist.id]);
       setContainerHeightRef.current(containerRef.current.clientHeight)
       setArtistRef.current(initialArtist)
     });
   }
 
+  function clearGraph() {
+    graphDataSets.edges.clear()
+    graphDataSets.nodes.clear()
+    // trie.children = {}
+    setArtistRef.current(null)
+  }
+
   return (
     <div className="graph-wrapper">
-      <SearchBar className={"testNewButton"} searchCallback={() => { }} suggestionCallback={() => { }} placeholderText={"test"} fontAwesomeIcon={["fas", "bars"]} />
-      <SearchBar className={"addToGraph"} searchCallback={handleSearch} suggestionCallback={getSpotifySuggestions} placeholderText={"Add Artist"} fontAwesomeIcon={["fas", "plus"]} startOpen={true}></SearchBar>
-      {/* <input id="small-button" className="radioButton" type="radio" value="small" name="graphSize" /> <label id="small-button-label" htmlFor="small-button"> Immediate Connections </label>
-      <input id="large-button" className="radioButton" type="radio" value="large" name="graphSize" defaultChecked /> <label id="large-button-label" htmlFor="large-button"> Secondary Connections </label> */}
-      <SearchBar className={"inGraphSearch"} searchCallback={highlightArtistWithName} suggestionCallback={getArtistsWithPrefix} placeholderText={"Search Graph's Artists"} fontAwesomeIcon={["fas", "search"]} />
+      <header className="header-wrapper">
+        <h1 className="header-audio">audio</h1><h1 className="header-graph">graph</h1>
+      </header>
+      <Menu storeSetOpenCallBack={storeSetMenuOpenRef} setNumberOfStepsCallback={setNumberOfStepsRef} />
+      <button className="menu-button" title="Open Menu" onClick={() => { setMenuOpenRef.current(true) }}><FontAwesomeIcon icon={["fas", "bars"]} size="lg" /></button>
+      <SearchBar className={"addToGraph"} searchCallback={handleSearch} suggestionCallback={getSpotifySuggestions} placeholderText={"Add Artist"} fontAwesomeIcon={["fas", "plus"]}></SearchBar>
+      <SearchBar className={"inGraphSearch"} searchCallback={highlightArtistWithName} suggestionCallback={getArtistsWithPrefix} placeholderText={"Search Graph"} fontAwesomeIcon={["fas", "search"]} />
+      <button className="fit-button" title="Fit Graph" onClick={() => { networkRef.current.fit() }}><FontAwesomeIcon icon={["fas", "compress-alt"]} size="lg" /></button>
+      <button className="reset-button" title="Clear Graph" onClick={clearGraph}><FontAwesomeIcon icon={["fas", "times"]} size="lg" /></button>
       <SpotifyEmbed storeSetStateCallback={storeSetStateRefs} />
       <div className="PeterGraph" id="mynetwork" ref={containerRef}>Graph</div>
     </div>

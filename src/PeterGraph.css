@@ -3,25 +3,63 @@
   background-color: hsl(0, 0%, 11%);
 }
 
-.testNewButton{
-  position: absolute;
+.menu-button{
+  position:absolute;
   z-index: 100;
-  margin-top: 25px;
+  margin-top: 50px;
   margin-left: 10px;
+  border-radius: 20%;
+  background-color: hsl(0, 0%, 35%);
+  opacity: 100%;
+  color: hsla(0, 0%, 99%, 1);
+  border:none;
+  height: 30px;
+  cursor: pointer;
+  width: 30px;
 }
 
 .addToGraph{
   position: absolute;
-  z-index: 100;
-  margin-top:70px;
+  z-index: 150;
+  margin-top: 95px;
   margin-left: 10px
 }
 
 .inGraphSearch{
   position: absolute;
-  z-index: 100;
-  margin-top: 115px;
+  z-index: 150;
+  margin-top: 140px;
   margin-left: 10px;
+}
+
+.fit-button{
+  position:absolute;
+  z-index: 100;
+  margin-top: 185px;
+  margin-left: 10px;
+  border-radius: 20%;
+  background-color: hsl(0, 0%, 35%);
+  opacity: 100%;
+  color: hsla(0, 0%, 99%, 1);
+  border:none;
+  height: 30px;
+  cursor: pointer;
+  width: 30px;
+}
+
+.reset-button{
+  position:absolute;
+  z-index: 100;
+  margin-top: 230px;
+  margin-left: 10px;
+  border-radius: 20%;
+  background-color: hsl(0, 0%, 35%);
+  opacity: 100%;
+  color: hsla(0, 0%, 99%, 1);
+  border:none;
+  height: 30px;
+  cursor: pointer;
+  width: 30px;
 }
 
 
@@ -41,4 +79,23 @@
   z-index: 100;
   margin-top: 50px;
   color:white;
+}
+
+.header-audio{
+  text-align: right;
+  color: #7299fc;
+  margin:0%;
+}
+
+.header-graph{
+  margin: 0%;
+}
+
+.header-wrapper{
+  width: 100%;
+  position:absolute;
+  z-index: 100;
+  font-size: 1.5rem;
+  display:grid;
+  grid-template-columns: 50% 50%;
 }

@@ -1,0 +1,86 @@
+
+.minus-button{
+    /* vertical-align: top; */
+    text-align: center;
+    background-color: hsl(0, 0%, 35%);
+    color: hsla(0, 0%, 99%, 1);
+    border:none;
+    border-radius: 20%;
+    height: 25px;
+    cursor: pointer;
+    width: 25px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
+.plus-button{
+    /* vertical-align: top; */
+    text-align: center;
+    background-color: hsl(0, 0%, 35%);
+    color: hsla(0, 0%, 99%, 1);
+    border:none;
+    border-radius: 20%;
+    height: 25px;
+    cursor: pointer;
+    width: 25px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
+
+.example-button{
+    display: block;
+    z-index: 100;
+    border-radius: 20%;
+    background-color: hsl(0, 0%, 35%);
+    opacity: 100%;
+    color: hsla(0, 0%, 99%, 1);
+    border:none;
+    height: 30px;
+    cursor: pointer;
+    width: 30px;
+    align-self: right;
+  }
+
+  .example-span{
+      align-self: right;
+  }
+
+  .controls-grid{
+      display:grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      background-color: inherit;
+      column-gap: 10px;
+  }
+
+.menu{
+    position: absolute;
+    width: 400px;
+    max-width: 100%;
+    height: 100%;
+    padding-left: 5px;
+    background-color: hsl(0, 0%, 22%);
+    z-index:400;
+    overflow:auto;
+}
+.menu>section>*{
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+#about-section, #controls-section{
+    border-top: 1px solid hsla(0, 0%, 99%, 1);
+
+}
+
+.menu>section>h2{
+    margin-left: 0.25rem;
+    margin-top: 5px;
+    margin-bottom:5px;
+}
+
+.close-icon{
+    position:absolute;
+    right: 15px;
+    margin-top: 5px;
+    cursor: pointer;
+}

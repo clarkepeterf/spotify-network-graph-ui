@@ -57,10 +57,10 @@
   width: 0px;
   background-color: #f8f8ff;
   color: black;
-  transition: opacity,width 0.25s;
+  transition: width 0.15s, opacity 0.15s;
   pointer-events: none;
   position: absolute;
-  z-index: 99;
+  z-index: 150;
 }
 
 .boxAndIcon{
@@ -73,7 +73,7 @@
   pointer-events:inherit;
 }
 
-button{
+.button{
   vertical-align: top;
   background-color: hsl(0, 0%, 35%);
   color: hsla(0, 0%, 99%, 1);
