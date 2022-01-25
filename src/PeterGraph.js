@@ -22,6 +22,7 @@ const PeterGraph = () => {
   };
   const numberOfStepsRef = useRef(null)
 
+
   function storeSetStateRefs(artistFunc, containerHeightFunc) {
     setArtistRef.current = artistFunc
     setContainerHeightRef.current = containerHeightFunc
@@ -34,6 +35,8 @@ const PeterGraph = () => {
   function setNumberOfStepsRef(numberOfSteps) {
     numberOfStepsRef.current = numberOfSteps
   }
+
+
 
   const trie =
   {
@@ -144,12 +147,8 @@ const PeterGraph = () => {
   });
 
   const handleResize = async (event) => {
-    console.log("prev:", { width: prevContainerWidthRef, height: prevContainerHeightRef })
-    console.log("curr:", { width: containerRef.current.clientWidth, height: containerRef.current.clientHeight })
-    if (containerRef.current.clientWidth !== prevContainerWidthRef.current || containerRef.current.clientHeight !== prevContainerHeightRef.current) {
-      networkRef.current && networkRef.current.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight) && networkRef.current.fit();
-      containerRef.current && setContainerHeightRef.current(containerRef.current.clientHeight)
-    }
+    networkRef.current && networkRef.current.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight) && networkRef.current.fit();
+    containerRef.current && setContainerHeightRef.current(containerRef.current.clientHeight)
   }
 
   const convertArtistToNode = (artist) => {
@@ -162,6 +161,7 @@ const PeterGraph = () => {
   }
 
   const addRelatedArtists = async (artistId, degreesOfSeparation) => {
+
     if (degreesOfSeparation > 0) {
       const { x, y } = networkRef.current.getPosition(artistId);
       const relatedArtists = await getRelatedArtists(artistId);
@@ -191,11 +191,13 @@ const PeterGraph = () => {
       graphDataSets.nodes.add(node)
     }
     updateTrie(node)
+
   }
 
   const handleSearch = async (searchString) => {
     const initialArtist = await getArtistByName(searchString);
     const initialNode = convertArtistToNode(initialArtist);
+
     addNode(initialNode);
     addRelatedArtists(initialArtist.id, numberOfStepsRef.current).then(() => {
       networkRef.current.selectNodes([initialArtist.id]);

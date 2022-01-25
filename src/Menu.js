@@ -31,14 +31,14 @@ export default function Menu({ storeSetOpenCallBack, setNumberOfStepsCallback })
                 <FontAwesomeIcon className="close-icon" onClick={() => { setIsOpen(false) }} icon={["fas", "times"]} size="lg" />
                 <h2>Settings</h2>
                 <h4>Number of Steps From Initial Artist:</h4>
-                <div>
+                <div className="step-change">
                     <button
                         className="minus-button"
                         onClick={() => { decrease() }}
                     >
                         <FontAwesomeIcon icon={["fas", "minus"]} size="sm" />
                     </button>
-                    {numberOfSteps}
+                    <p>{numberOfSteps}</p>
                     <button
                         className="plus-button"
                         onClick={() => { increase() }}

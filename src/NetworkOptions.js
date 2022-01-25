@@ -31,6 +31,7 @@ const networkOptions = {
         barnesHut: {
             avoidOverlap: 1,
             gravitationalConstant: -50000,
+
         }
     }
 };

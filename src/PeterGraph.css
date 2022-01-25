@@ -4,18 +4,20 @@
 }
 
 .menu-button{
+  display: grid;
+  align-items: center;
+  justify-items:center;
   position:absolute;
-  z-index: 100;
   margin-top: 50px;
   margin-left: 10px;
   border-radius: 20%;
   background-color: hsl(0, 0%, 35%);
-  opacity: 100%;
   color: hsla(0, 0%, 99%, 1);
   border:none;
   height: 30px;
   cursor: pointer;
   width: 30px;
+  z-index: 100;
 }
 
 .addToGraph{
@@ -33,33 +35,37 @@
 }
 
 .fit-button{
+  display: grid;
+  align-items: center;
+  justify-items:center;
   position:absolute;
-  z-index: 100;
   margin-top: 185px;
   margin-left: 10px;
   border-radius: 20%;
   background-color: hsl(0, 0%, 35%);
-  opacity: 100%;
   color: hsla(0, 0%, 99%, 1);
   border:none;
   height: 30px;
   cursor: pointer;
   width: 30px;
+  z-index: 100;
 }
 
 .reset-button{
+  display: grid;
+  align-items: center;
+  justify-items:center;
   position:absolute;
-  z-index: 100;
   margin-top: 230px;
   margin-left: 10px;
   border-radius: 20%;
   background-color: hsl(0, 0%, 35%);
-  opacity: 100%;
   color: hsla(0, 0%, 99%, 1);
   border:none;
   height: 30px;
   cursor: pointer;
   width: 30px;
+  z-index: 100;
 }
 
 

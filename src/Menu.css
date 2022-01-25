@@ -1,7 +1,8 @@
 
 .minus-button{
-    /* vertical-align: top; */
-    text-align: center;
+    display: grid;
+    justify-items: center;
+    align-items: center;
     background-color: hsl(0, 0%, 35%);
     color: hsla(0, 0%, 99%, 1);
     border:none;
@@ -9,12 +10,13 @@
     height: 25px;
     cursor: pointer;
     width: 25px;
-    margin-right: 5px;
-    margin-bottom: 10px;
+    justify-self: end;
+    align-self: center; 
 }
 .plus-button{
-    /* vertical-align: top; */
-    text-align: center;
+    display: grid;
+    justify-items: center;
+    align-items: center;
     background-color: hsl(0, 0%, 35%);
     color: hsla(0, 0%, 99%, 1);
     border:none;
@@ -22,16 +24,22 @@
     height: 25px;
     cursor: pointer;
     width: 25px;
-    margin-left: 5px;
-    margin-bottom: 10px;
+    justify-self: start;
+    align-self: center;
+}
+
+.step-change{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-items: center;
 }
 
 .example-button{
-    display: block;
-    z-index: 100;
+    display: grid;
+    justify-items: center;
+    align-items: center;
     border-radius: 20%;
     background-color: hsl(0, 0%, 35%);
-    opacity: 100%;
     color: hsla(0, 0%, 99%, 1);
     border:none;
     height: 30px;
