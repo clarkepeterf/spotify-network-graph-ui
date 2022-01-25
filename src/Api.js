@@ -1,6 +1,6 @@
-const ec2Url = 'https://www.peterclarke.org/spotify-network-graph-api';
+const apiUrl = 'https://www.peterclarke.org/spotify-network-graph-api';
 
-const simpleGet = async (url) => {
+async function httpGet(url) {
   const response = await fetch(encodeURI(url));
   if (!response.ok) {
     throw Error(response.statusText);
@@ -9,27 +9,27 @@ const simpleGet = async (url) => {
   return result;
 }
 
-const getSpotifySuggestions = async (searchString) => {
-  const suggestions = await simpleGet(`${ec2Url}/search?q=${searchString}`);
+async function getSpotifySuggestions(searchString) {
+  const suggestions = await httpGet(`${apiUrl}/search?q=${searchString}`);
   return suggestions;
 }
 export { getSpotifySuggestions };
 
-const getArtistById = async (id) => {
-  const artist = await simpleGet(`${ec2Url}/artist/${id}`);
+async function getArtistById(id) {
+  const artist = await httpGet(`${apiUrl}/artist/${id}`);
   return artist;
 }
 export { getArtistById };
 
-const getArtistByName = async (name) => {
-  const artist = await simpleGet(`${ec2Url}/artist?name=${name}`);
+async function getArtistByName(name) {
+  const artist = await httpGet(`${apiUrl}/artist?name=${name}`);
   return artist;
 }
 
 export { getArtistByName };
 
-const getRelatedArtists = async (id) => {
-  const relatedArtists = await simpleGet(`${ec2Url}/related/${id}`);
+async function getRelatedArtists(id) {
+  const relatedArtists = await httpGet(`${apiUrl}/related/${id}`);
   return relatedArtists;
 }
 

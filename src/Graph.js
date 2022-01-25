@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { DataSet, Network } from "vis-network/standalone";
-import "./PeterGraph.css";
+import "./Graph.css";
 import { getRelatedArtists, getArtistByName, getSpotifySuggestions } from "./Api";
 import SearchBar from "./SearchBar";
 import { networkOptions } from "./NetworkOptions"
@@ -8,7 +8,7 @@ import SpotifyEmbed from "./SpotifyEmbed";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Menu from "./Menu"
 
-const PeterGraph = () => {
+export default function Graph() {
   const prevContainerWidthRef = useRef(0);
   const prevContainerHeightRef = useRef(0);
   const containerRef = useRef(null);
@@ -44,7 +44,7 @@ const PeterGraph = () => {
     value: null,
   };
 
-  const updateTrie = (artist) => {
+  function updateTrie(artist) {
     let node = trie;
     for (const char of artist.label) {
       // Always add with lower case letters
@@ -62,7 +62,7 @@ const PeterGraph = () => {
     node.value = artist;
   };
 
-  const getArtistsWithPrefix = (prefix) => {
+  function getArtistsWithPrefix(prefix) {
     // Always get based on lowercase letters (trie expects lower case letters)
     const lowerCasePrefix = prefix.toLowerCase();
     const results = [];
@@ -74,7 +74,7 @@ const PeterGraph = () => {
     } else return results;
   }
 
-  const getTrieNodeWithPrefix = (prefix) => {
+  function getTrieNodeWithPrefix(prefix) {
     // Always get based on lower case letters (trie expects lower case letters)
     const lowerCasePrefix = prefix.toLowerCase();
     let node = trie;
@@ -88,7 +88,7 @@ const PeterGraph = () => {
     return node;
   }
 
-  const collectValuesMatchingPrefix = (node, prefix, results) => {
+  function collectValuesMatchingPrefix(node, prefix, results) {
     if (node === null) {
       return;
     }
@@ -102,7 +102,7 @@ const PeterGraph = () => {
     }
   }
 
-  const highlightArtistWithName = (name) => {
+  function highlightArtistWithName(name) {
     const trieNode = getTrieNodeWithPrefix(name);
     if (trieNode.value && trieNode.value.id && networkRef.current) {
       networkRef.current.selectNodes([trieNode.value.id]);
@@ -146,12 +146,12 @@ const PeterGraph = () => {
     }
   });
 
-  const handleResize = async (event) => {
+  async function handleResize(event) {
     networkRef.current && networkRef.current.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight) && networkRef.current.fit();
     containerRef.current && setContainerHeightRef.current(containerRef.current.clientHeight)
   }
 
-  const convertArtistToNode = (artist) => {
+  function convertArtistToNode(artist) {
     const images = artist.images
     return {
       id: artist.id,
@@ -160,7 +160,7 @@ const PeterGraph = () => {
     }
   }
 
-  const addRelatedArtists = async (artistId, degreesOfSeparation) => {
+  async function addRelatedArtists(artistId, degreesOfSeparation) {
 
     if (degreesOfSeparation > 0) {
       const { x, y } = networkRef.current.getPosition(artistId);
@@ -177,7 +177,7 @@ const PeterGraph = () => {
     }
   }
 
-  const convertArtistToNodeWithXY = (artist, x, y) => {
+  function convertArtistToNodeWithXY(artist, x, y) {
     return {
       ...convertArtistToNode(artist),
       x: x,
@@ -185,7 +185,7 @@ const PeterGraph = () => {
     }
   }
 
-  const addNode = (node) => {
+  function addNode(node) {
     const existingNode = graphDataSets.nodes.get(node.id)
     if (!existingNode) {
       graphDataSets.nodes.add(node)
@@ -194,7 +194,7 @@ const PeterGraph = () => {
 
   }
 
-  const handleSearch = async (searchString) => {
+  async function handleSearch(searchString) {
     const initialArtist = await getArtistByName(searchString);
     const initialNode = convertArtistToNode(initialArtist);
 
@@ -230,4 +230,3 @@ const PeterGraph = () => {
   );
 }
 
-export default PeterGraph;

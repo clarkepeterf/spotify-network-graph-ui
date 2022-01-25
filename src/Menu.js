@@ -1,6 +1,7 @@
 import "./Menu.css"
 import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+
 export default function Menu({ storeSetOpenCallBack, setNumberOfStepsCallback }) {
     const [numberOfSteps, setNumberOfSteps] = useState(2)
     const [isOpen, setIsOpen] = useState(false)

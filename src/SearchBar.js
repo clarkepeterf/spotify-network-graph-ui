@@ -3,7 +3,7 @@ import './SearchBar.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderText, fontAwesomeIcon, startOpen }) => {
+export default function SearchBar({ className, searchCallback, suggestionCallback, placeholderText, fontAwesomeIcon, startOpen }) {
   const [searchString, setSearchString] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [activeSelection, setActiveSelection] = useState(-1);
@@ -17,7 +17,7 @@ const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderT
     }
   }, [startOpen])
 
-  const handleInputChange = async (newInput) => {
+  async function handleInputChange(newInput) {
     setSearchString(newInput);
     if (newInput && newInput.length > 0) {
       try {
@@ -29,7 +29,7 @@ const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderT
     }
   }
 
-  const handleSearch = (searchString) => {
+  function handleSearch(searchString) {
     setSearchString(searchString);
     setSuggestions([]);
     if (searchString && searchString.length > 0) {
@@ -38,7 +38,7 @@ const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderT
     inputElement.current.blur();
   }
 
-  const handleKeyDown = (key) => {
+  function handleKeyDown(key) {
     switch (key) {
       case "Down": // IE/Edge specific value
       case "ArrowDown":
@@ -53,7 +53,7 @@ const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderT
     }
   }
 
-  const handleKeyPress = (key) => {
+  function handleKeyPress(key) {
     switch (key) {
       case 'Enter':
         if (activeSelection > -1) {
@@ -71,17 +71,17 @@ const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderT
     }
   }
 
-  const handleInputFocus = () => {
+  function handleInputFocus() {
     handleInputChange(searchString)
   }
 
-  const handleInputBlur = () => {
+  function handleInputBlur() {
     setSuggestions([]);
     setActiveSelection(-1);
     setIsOpen(false);
   }
 
-  const handleButtonClick = () => {
+  function handleButtonClick() {
     if (!isOpen) {
       inputElement.current.focus();
     } else {
@@ -128,5 +128,3 @@ const SearchBar = ({ className, searchCallback, suggestionCallback, placeholderT
     </div>
   );
 }
-
-export default SearchBar

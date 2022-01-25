@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
 import "./SpotifyEmbed.css"
+
 export default function SpotifyEmbed({ storeSetStateCallback }) {
     const [artist, setArtist] = useState(null)
     const [containerHeight, setContainerHeight] = useState(0);
