@@ -7,7 +7,7 @@ export default function SpotifyEmbed({ storeSetStateCallback }) {
     const [containerHeight, setContainerHeight] = useState(0);
     const [embedSize, setEmbedSize] = useState("small")
 
-    if (containerHeight <= 500 && embedSize !== "small") {
+    if (containerHeight <= 430 && embedSize !== "small") {
         setEmbedSize("small")
     }
 
@@ -27,7 +27,7 @@ export default function SpotifyEmbed({ storeSetStateCallback }) {
                 transition: "margin-top 0.25s"
             }}
         >
-            {artist && containerHeight > 500 &&
+            {artist && containerHeight > 430 &&
                 <button className={"chevronWrapper"} onClick={(e) => { toggleEmbedSize() }}>
                     <FontAwesomeIcon
                         icon={["fas", embedSize === "small" ? "chevron-up" : "chevron-down"]}

@@ -30,8 +30,6 @@ export default function SearchBar({ className, searchCallback, suggestionCallbac
   }
 
   function handleSearch(searchString) {
-    setSearchString(searchString);
-    setSuggestions([]);
     if (searchString && searchString.length > 0) {
       searchCallback(searchString);
     }
@@ -71,14 +69,11 @@ export default function SearchBar({ className, searchCallback, suggestionCallbac
     }
   }
 
-  function handleInputFocus() {
-    handleInputChange(searchString)
-  }
-
   function handleInputBlur() {
-    setSuggestions([]);
-    setActiveSelection(-1);
-    setIsOpen(false);
+    setSuggestions([])
+    setActiveSelection(-1)
+    setSearchString("")
+    setIsOpen(false)
   }
 
   function handleButtonClick() {
@@ -109,7 +104,6 @@ export default function SearchBar({ className, searchCallback, suggestionCallbac
               onChange={(e) => handleInputChange(e.target.value)}
               onKeyPress={(e) => handleKeyPress(e.key)}
               onBlur={() => handleInputBlur()}
-              onFocus={() => handleInputFocus()}
               onKeyDown={(e) => handleKeyDown(e.key)}
               onMouseOver={() => setActiveSelection(-1)}
             />
