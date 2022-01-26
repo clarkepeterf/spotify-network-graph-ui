@@ -1,31 +1,3 @@
-function getNodeWithPrefix(data, prefix) {
-    // Always get based on lower case letters (trie expects lower case letters)
-    const lowerCasePrefix = prefix.toLowerCase();
-    let node = data;
-    for (const char of lowerCasePrefix) {
-        if (char in node.children) {
-            node = node.children[char]
-        } else {
-            return null;
-        }
-    }
-    return node;
-}
-
-function collectValuesMatchingPrefix(node, prefix, results) {
-    if (node === null) {
-        return;
-    }
-    if (node.value !== null) {
-        results.push(node.value.label);
-    }
-    const childKeys = Object.keys(node.children);
-    for (const char of childKeys) {
-        const newPrefix = prefix + char;
-        collectValuesMatchingPrefix(node.children[char], newPrefix, results);
-    }
-}
-
 export default class ArtistTrie {
 
     #data = {
@@ -82,5 +54,33 @@ export default class ArtistTrie {
             children: {},
             value: null,
         }
+    }
+}
+
+function getNodeWithPrefix(data, prefix) {
+    // Always get based on lower case letters (trie expects lower case letters)
+    const lowerCasePrefix = prefix.toLowerCase();
+    let node = data;
+    for (const char of lowerCasePrefix) {
+        if (char in node.children) {
+            node = node.children[char]
+        } else {
+            return null;
+        }
+    }
+    return node;
+}
+
+function collectValuesMatchingPrefix(node, prefix, results) {
+    if (node === null) {
+        return;
+    }
+    if (node.value !== null) {
+        results.push(node.value.label);
+    }
+    const childKeys = Object.keys(node.children);
+    for (const char of childKeys) {
+        const newPrefix = prefix + char;
+        collectValuesMatchingPrefix(node.children[char], newPrefix, results);
     }
 }
