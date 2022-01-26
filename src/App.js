@@ -1,61 +1,13 @@
-import React, { useState, useCallback } from "react";
-import SideBar from "./SideBar";
-import "./App.css"
-import MemoizedGraph from "./MemoizedGraph";
-import { getArtistById, getArtistByName, getRelatedArtistGraph, getSpotifySuggestions } from "./Api"
+import React from "react";
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSearch, faPlus, faMinus, faTimes, faBars, faUndo, faChevronUp, faChevronDown, faInfo, faTimesCircle, faCompressAlt, faCircle, faMousePointer } from '@fortawesome/free-solid-svg-icons'
+import Graph from "./Graph";
 
-const App = () => {
+library.add(faSearch, faPlus, faMinus, faTimes, faBars, faUndo, faChevronUp, faChevronDown, faInfo, faTimesCircle, faCompressAlt, faCircle, faMousePointer);
 
-  const [error, setError] = useState(null);
-  const [graph, setGraph] = useState({ nodes: [], edges: [] });
-  const [graphInitialArtist, setGraphInitialArtist] = useState(null);
-  const [degreesOfSeparation, setDegreesOfSeparation] = useState(2);
-  const [artistInFocus, setArtistInFocus] = useState(null);
-  const [artistInFocusError, setArtistInFocusError] = useState(null);
+export default function App() {
 
-  const toggleDegreesOfSeparation = () => {
-    degreesOfSeparation === 1 ? setDegreesOfSeparation(2) : setDegreesOfSeparation(1);
-  }
-
-  const handleGetArtistById = useCallback(async (id) => {
-    try {
-      const artist = await getArtistById(id, setArtistInFocus, setError);
-      setArtistInFocus(artist);
-    } catch (error) {
-      setArtistInFocusError(`Failed to get artist with id: ${id}`);
-    }
-  }, []);
-
-  const handleSearch = async (searchString) => {
-    try {
-      const relatedArtistGraph = await getRelatedArtistGraph(searchString, degreesOfSeparation);
-      setGraph(relatedArtistGraph);
-      const artist = await getArtistByName(searchString);
-      setArtistInFocus(artist);
-      setGraphInitialArtist(artist);
-    } catch (error) {
-      setError(error)
-    }
-  }
-
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  } else {
-    return (
-      <div className="app">
-        <SideBar
-          artistInFocus={artistInFocus}
-          artistInFocusError={artistInFocusError}
-          toggleClickCallback={toggleDegreesOfSeparation}
-          searchCallback={handleSearch}
-          searchSuggestionCallback={getSpotifySuggestions}
-          searchPlaceholderText={"Search Artist to Create a Graph"} />
-        <div className="graph">
-          <MemoizedGraph initialArtist={graphInitialArtist} graph={graph} artistSelectedCallback={handleGetArtistById}></MemoizedGraph>
-        </div>
-      </div>
-    );
-  }
+  return (
+    <Graph />
+  );
 }
-
-export default App;
